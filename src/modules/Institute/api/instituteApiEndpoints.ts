@@ -13,6 +13,16 @@ const instituteApiEndpoints = api.injectEndpoints({
       }),
       providesTags: ["INSTITUTE"],
     }),
+    getSingleInstitute: builder.query<
+      ApiResponse<IInstituteALL>,
+      { id: number }
+    >({
+      query: ({ id }) => ({
+        url: `/management/institute/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["INSTITUTE"],
+    }),
     // createInstitute: builder.mutation<void, FormData>({
     //   query: (payload): FetchArgs => ({
     //     console.log(payload)
@@ -65,6 +75,7 @@ const instituteApiEndpoints = api.injectEndpoints({
 export const {
   useCreateInstituteMutation,
   useGetInstituteListQuery,
+  useGetSingleInstituteQuery,
   // useUpdateDepartmentMutation,
   // useDeleteDepartmentMutation,
 } = instituteApiEndpoints;

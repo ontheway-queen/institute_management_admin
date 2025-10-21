@@ -62,12 +62,12 @@ const SemesterList = () => {
     }
   };
 
-  const handleEdit = (record: ISemester) => {
-    setEditingSemester(record);
-    form.setFieldsValue({
-      semesters: [{ semester_code: record.semester_code }],
-    });
-  };
+  // const handleEdit = (record: ISemester) => {
+  //   setEditingSemester(record);
+  //   form.setFieldsValue({
+  //     semesters: [{ semester_code: record.semester_code }],
+  //   });
+  // };
 
   const handleDelete = async (id: number) => {
     try {

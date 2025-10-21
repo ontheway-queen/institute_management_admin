@@ -21,13 +21,13 @@ import { IInstitute } from "../types/instituteTypes";
 const CreateInstitute: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [query, setSearchParams] = useQueryParams<{
+  const [query] = useQueryParams<{
     limit: string;
     skip: string;
     name: string;
   }>();
   const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-  const { data: departmentData, isLoading } = useGetDepartmentListQuery({
+  const { data: departmentData } = useGetDepartmentListQuery({
     ...query,
   });
   const { data: subjectData } = useGetSubjectListQuery({
@@ -304,7 +304,7 @@ const CreateInstitute: React.FC = () => {
       </Row>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" loading={createLoading} htmlType="submit">
           Create Institute
         </Button>
       </Form.Item>

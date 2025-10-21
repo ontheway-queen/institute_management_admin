@@ -7,8 +7,10 @@ import CommTableActions from "../../../common/Utilities/CommTableActions";
 import { imgUrl2 } from "../../../app/utilities/baseQuery";
 import { IInstituteALL } from "../types/instituteTypes";
 import { ColumnsType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
 
 const InstituteList = () => {
+  const navigate = useNavigate();
   const [query, setSearchParams] = useQueryParams<{
     limit: string;
     skip: string;
@@ -67,16 +69,23 @@ const InstituteList = () => {
       key: "action",
       align: "center",
       width: 110,
-      render: (_, record) => (
+      render: (_: any, record: IInstituteALL) => (
         <CommTableActions
           showDelete
-          // deleteOnConfirm={() => deleteInstitute(record.id)}
-          // showEdit
-          // handleEditChange={() => handleEdit(record)}
+          showView
+          handleViewChange={() => {
+            if (record.id !== undefined) handleView(record.id);
+          }}
+          // handleEditChange={() => handleEdit(record.id)}
         />
       ),
     },
   ];
+
+  const handleView = (id: number) => {
+    // Navigate to /institute/view/:id
+    navigate(`/institute/view/${id}`);
+  };
   const { data, isLoading } = useGetInstituteListQuery({ ...query });
   const instituteData: IInstituteALL[] = Array.isArray(data?.data)
     ? data.data

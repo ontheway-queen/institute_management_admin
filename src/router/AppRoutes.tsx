@@ -9,6 +9,7 @@ import SemesterList from "../modules/Semester/pages/SemesterList";
 import SubjectList from "../modules/Subject/pages/SubjectList";
 import CreateSubject from "../modules/Subject/components/CreateSubject";
 import InstituteList from "../modules/Institute/pages/InstituteList";
+import ViewInstitute from "../modules/Institute/pages/ViewInstitute";
 
 type AppRouteObject = RouteObject & {
   children?: AppRouteObject[];
@@ -41,6 +42,7 @@ export const appRoutes: AppRouteObject[] = [
         path: "create",
         element: <CreateInstitute />,
       },
+      { path: "view/:id", element: <ViewInstitute /> },
     ],
   },
   {

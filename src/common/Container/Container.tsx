@@ -10,22 +10,22 @@ import {
   Select,
   Space,
   Typography,
-} from 'antd';
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ModalTypes, showModal } from '../../app/slice/modalSlice';
-import { useAppDispatch, useAppSelector } from '../../app/store';
-import Iconify from '../../config/IconifyConfig';
-import useBreakpoint from '../../hooks/useBreakpoint';
-import BreadCrumb from '../Antd/BreadCrumb';
-import { DrawerTypes, showDrawer } from '../../app/slice/drawerSlice';
-import { SearchOutlined } from '@ant-design/icons';
-import useQueryParams from '../../hooks/useQueryParams';
-import { debounce } from 'lodash';
-import dayjs from 'dayjs';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import { ThemeState } from '../../app/slice/themeSlice';
-import { hexToRgba, rangePresets } from '../../utilities/helper';
+} from "antd";
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { ModalTypes, showModal } from "../../app/slice/modalSlice";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import Iconify from "../../config/IconifyConfig";
+import useBreakpoint from "../../hooks/useBreakpoint";
+import BreadCrumb from "../Antd/BreadCrumb";
+import { DrawerTypes, showDrawer } from "../../app/slice/drawerSlice";
+import { SearchOutlined } from "@ant-design/icons";
+import useQueryParams from "../../hooks/useQueryParams";
+import { debounce } from "lodash";
+import dayjs from "dayjs";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { ThemeState } from "../../app/slice/themeSlice";
+import { hexToRgba, rangePresets } from "../../utilities/helper";
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 interface Props {
@@ -74,7 +74,7 @@ const Container: React.FC<Props> = ({
   content,
   openModal,
   openDrawer,
-  buttonLabel = 'Create',
+  buttonLabel = "Create",
   options = {},
   buttonLink,
   handleSearchFun,
@@ -84,7 +84,7 @@ const Container: React.FC<Props> = ({
   showTitleWithIcon,
 }) => {
   const { colorPrimary, mode } = useAppSelector(ThemeState);
-  const isLight: boolean = mode === 'light' ? true : false;
+  const isLight: boolean = mode === "light" ? true : false;
   const [query, setSearchParams, searchParams] = useQueryParams<{
     limit: string;
     skip: string;
@@ -97,7 +97,7 @@ const Container: React.FC<Props> = ({
     showButton: options.showButton,
     showSearch: options.showSearch,
     searchKeyName: options.searchKeyName,
-    placeholder: options.placeholder ?? 'Search',
+    placeholder: options.placeholder ?? "Search",
     showDateRange: options.showDateRange,
     showStatus: options.showStatus,
     showStatus1: options.showStatus1,
@@ -117,57 +117,57 @@ const Container: React.FC<Props> = ({
           setSearchParams({ ...query, filter: value.target.value });
         }
       } else {
-        searchParams.delete(activeOptions?.searchKeyName || 'filter');
+        searchParams.delete(activeOptions?.searchKeyName || "filter");
         setSearchParams(searchParams);
       }
     }, 500),
     []
   );
   return (
-    <Space direction='vertical' style={{ width: '100%' }} size={'large'}>
-      <Card size='small'>
+    <Space direction="vertical" style={{ width: "100%" }} size={"large"}>
+      <Card size="small">
         <BreadCrumb />
         {activeOptions?.showSearchFilter && (
           <Row
             style={{
-              background: isLight ? 'rgb(249 250 251)' : '',
-              border: !isLight ? '1px solid #353232' : 'none',
-              padding: '10px 5px',
-              borderWidth: '1px',
-              marginTop: '20px',
+              background: isLight ? "rgb(249 250 251)" : "",
+              border: !isLight ? "1px solid #353232" : "none",
+              padding: "10px 5px",
+              borderWidth: "1px",
+              marginTop: "20px",
             }}
             gutter={[10, 10]}
-            justify={'space-between'}
+            justify={"space-between"}
           >
             <Col
               xs={24}
               lg={6}
               xl={6}
-              style={{ display: 'flex', alignItems: 'center' }}
+              style={{ display: "flex", alignItems: "center" }}
             >
-              <span style={{ display: 'flex', gap: '5px' }}>
+              <span style={{ display: "flex", gap: "5px" }}>
                 <Icon
-                  icon={'uil:filter'}
+                  icon={"uil:filter"}
                   color={colorPrimary}
                   fontSize={20}
                   style={{
                     background: hexToRgba(colorPrimary, 0.2),
-                    padding: '2px',
+                    padding: "2px",
                   }}
-                />{' '}
+                />{" "}
                 <Text strong> Filter & Search Controls</Text>
               </span>
             </Col>
 
             <Col xs={24} lg={18} xl={18} xxl={15}>
-              <Row justify={'end'} gutter={[5, 5]}>
+              <Row justify={"end"} gutter={[5, 5]}>
                 {activeOptions.showSearch && (
                   <Col xs={24} sm={24} md={8} xl={6}>
                     <Input
                       allowClear
                       defaultValue={
                         searchParams.get(
-                          activeOptions.searchKeyName || 'filter'
+                          activeOptions.searchKeyName || "filter"
                         ) || undefined
                       }
                       maxLength={50}
@@ -181,22 +181,22 @@ const Container: React.FC<Props> = ({
                   <Col xs={24} sm={24} md={8} xl={6}>
                     <Select
                       defaultValue={
-                        searchParams.get(statusOption?.queryName || 'status') ||
+                        searchParams.get(statusOption?.queryName || "status") ||
                         statusOption?.defaultValue
                       }
-                      style={{ width: '100%' }}
+                      style={{ width: "100%" }}
                       allowClear
                       options={statusOption?.options}
-                      placeholder={statusOption?.placeholder || 'Select'}
+                      placeholder={statusOption?.placeholder || "Select"}
                       onChange={(e) => {
                         if (e) {
                           setSearchParams({
                             ...query,
-                            [`${statusOption?.queryName || 'status'}`]: e,
+                            [`${statusOption?.queryName || "status"}`]: e,
                           });
                         } else {
                           searchParams.delete(
-                            statusOption?.queryName || 'status'
+                            statusOption?.queryName || "status"
                           );
                           setSearchParams(searchParams);
                         }
@@ -208,22 +208,22 @@ const Container: React.FC<Props> = ({
                   <Col xs={24} sm={24} md={8} xl={6}>
                     <Select
                       defaultValue={
-                        searchParams.get(statusOption1?.queryName || '') ||
+                        searchParams.get(statusOption1?.queryName || "") ||
                         statusOption1?.defaultValue
                       }
-                      style={{ width: '100%' }}
+                      style={{ width: "100%" }}
                       allowClear
                       options={statusOption1?.options}
-                      placeholder={statusOption1?.placeholder || 'Select'}
+                      placeholder={statusOption1?.placeholder || "Select"}
                       onChange={(e) => {
                         if (e) {
                           setSearchParams({
                             ...query,
-                            [`${statusOption1?.queryName || 'status'}`]: e,
+                            [`${statusOption1?.queryName || "status"}`]: e,
                           });
                         } else {
                           searchParams.delete(
-                            statusOption1?.queryName || 'status'
+                            statusOption1?.queryName || "status"
                           );
                           setSearchParams(searchParams);
                         }
@@ -235,14 +235,14 @@ const Container: React.FC<Props> = ({
                   <Col xs={24} sm={24} md={8} xl={6}>
                     <>
                       <RangePicker
-                        style={{ width: '100%' }}
+                        style={{ width: "100%" }}
                         presets={rangePresets}
                         defaultValue={
-                          searchParams.get('start_date') &&
-                          searchParams.get('end_date')
+                          searchParams.get("start_date") &&
+                          searchParams.get("end_date")
                             ? [
-                                dayjs(searchParams.get('start_date')),
-                                dayjs(searchParams.get('end_date')),
+                                dayjs(searchParams.get("start_date")),
+                                dayjs(searchParams.get("end_date")),
                               ]
                             : undefined
                         }
@@ -254,8 +254,8 @@ const Container: React.FC<Props> = ({
                               end_date: dateRange[1],
                             });
                           } else {
-                            searchParams.delete('start_date');
-                            searchParams.delete('end_date');
+                            searchParams.delete("start_date");
+                            searchParams.delete("end_date");
                             setSearchParams(searchParams);
                           }
                         }}
@@ -269,15 +269,15 @@ const Container: React.FC<Props> = ({
         )}
       </Card>
 
-      <Card size='small'>
-        <Row justify={'space-between'} align={'middle'}>
+      <Card size="small">
+        <Row justify={"space-between"} align={"middle"}>
           {showBackbtn && (
             <Col>
               <Icon
-                icon='fxemoji:backwithleftwardsarrow'
-                width='30'
-                height='25'
-                style={{ cursor: 'pointer' }}
+                icon="fxemoji:backwithleftwardsarrow"
+                width="30"
+                height="25"
+                style={{ cursor: "pointer" }}
                 onClick={() => navigate(-1)}
               />
             </Col>
@@ -287,13 +287,13 @@ const Container: React.FC<Props> = ({
             <Typography.Text
               strong
               style={{
-                fontSize: lg ? '1.5rem' : '1rem',
+                fontSize: lg ? "1.5rem" : "1rem",
                 margin: 0,
               }}
             >
-              <Space align='center' style={{ lineHeight: 0 }}>
+              <Space align="center" style={{ lineHeight: 0 }}>
                 {showTitleWithIcon && (
-                  <Icon icon={showTitleWithIcon} width='28' height='25' />
+                  <Icon icon={showTitleWithIcon} width="28" height="25" />
                 )}
 
                 {title}
@@ -304,13 +304,13 @@ const Container: React.FC<Props> = ({
                   orientationMargin={0}
                 />
               )}
-            </Typography.Text>{' '}
+            </Typography.Text>{" "}
           </Col>
 
           <Col>
             {activeOptions.showButton && (
               <Button
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 onClick={() => {
                   return buttonLink
                     ? navigate(buttonLink)
@@ -320,8 +320,8 @@ const Container: React.FC<Props> = ({
                           : showDrawer(openDrawer)
                       );
                 }}
-                type='primary'
-                icon={<Iconify icon='mdi:add-bold' />}
+                type="primary"
+                icon={<Iconify icon="mdi:add-bold" />}
               >
                 {buttonLabel}
               </Button>
@@ -329,7 +329,7 @@ const Container: React.FC<Props> = ({
           </Col>
         </Row>
 
-        <div style={{ marginTop: '12px' }}>{content}</div>
+        <div style={{ marginTop: "12px" }}>{content}</div>
       </Card>
     </Space>
   );

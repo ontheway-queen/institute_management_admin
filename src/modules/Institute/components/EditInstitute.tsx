@@ -1,79 +1,71 @@
-import { useEffect } from "react";
-import { useForm } from "antd/es/form/Form";
-import {
-  IDepartmentListType,
-  IDepartmentFormValues,
-  IUpdateDepartmentType,
-} from "../types/instituteTypes";
-import { useUpdateDepartmentMutation } from "../api/instituteApiEndpoints";
-import CreateDepartment from "./CreateDepartment";
-import { setFormInstance } from "../../../app/utilities/formManager";
+// import { useEffect } from "react";
+// import { useForm } from "antd/es/form/Form";
 
-type IProps = {
-  record: IDepartmentListType;
-};
+// import CreateDepartment from "./CreateDepartment";
+// import { setFormInstance } from "../../../app/utilities/formManager";
 
-const EditInstitute = ({ record }: IProps) => {
-  const [form] = useForm<IDepartmentFormValues>();
-  const [updateDepartment, { isLoading: updateLod, isSuccess }] =
-    useUpdateDepartmentMutation();
+// type IProps = {
+//   record: IDepartmentListType;
+// };
 
-  // Initialize form
-  useEffect(() => {
-    if (record) {
-      form.setFieldsValue({
-        departments: [
-          {
-            name: record.name,
-            code: record.code || 0,
-            short_name: record.short_name || "",
-            status: record.status,
-          },
-        ],
-      });
-    } else {
-      form.resetFields();
-    }
-  }, [record, form]);
+// const EditInstitute = ({ record }: IProps) => {
 
-  // Reset form after success
-  useEffect(() => {
-    if (isSuccess) {
-      form.resetFields();
-    }
-  }, [isSuccess, form]);
+//   // Initialize form
+//   useEffect(() => {
+//     if (record) {
+//       form.setFieldsValue({
+//         departments: [
+//           {
+//             name: record.name,
+//             code: record.code || 0,
+//             short_name: record.short_name || "",
+//             status: record.status,
+//           },
+//         ],
+//       });
+//     } else {
+//       form.resetFields();
+//     }
+//   }, [record, form]);
 
-  // Only send changed values
-  const onFinish = async (values: IDepartmentFormValues) => {
-    setFormInstance(form);
+//   // Reset form after success
+//   useEffect(() => {
+//     if (isSuccess) {
+//       form.resetFields();
+//     }
+//   }, [isSuccess, form]);
 
-    const formValues = values.departments[0];
-    const payload: Partial<IUpdateDepartmentType> & { id: number } = {
-      id: record.id,
-    };
+//   // Only send changed values
+//   const onFinish = async (values: IDepartmentFormValues) => {
+//     setFormInstance(form);
 
-    // Compare with original record, only include changed fields
-    if (formValues.name !== record.name) payload.name = formValues.name;
-    if (formValues.code !== record.code) payload.code = formValues.code;
-    if (formValues.short_name !== record.short_name)
-      payload.short_name = formValues.short_name;
-    if (formValues.status !== record.status) payload.status = formValues.status;
+//     const formValues = values.departments[0];
+//     const payload: Partial<IUpdateDepartmentType> & { id: number } = {
+//       id: record.id,
+//     };
 
-    // Only send if at least one field changed
-    const keys = Object.keys(payload).filter((k) => k !== "id");
-    if (keys.length > 0) {
-      await updateDepartment(payload);
-    }
-  };
+//     // Compare with original record, only include changed fields
+//     if (formValues.name !== record.name) payload.name = formValues.name;
+//     if (formValues.code !== record.code) payload.code = formValues.code;
+//     if (formValues.short_name !== record.short_name)
+//       payload.short_name = formValues.short_name;
+//     if (formValues.status !== record.status) payload.status = formValues.status;
 
-  return (
-    <CreateDepartment
-      editMode
-      form={form} // TS now happy
-      loading={updateLod}
-      onFinish={onFinish}
-    />
-  );
-};
+//     // Only send if at least one field changed
+//     const keys = Object.keys(payload).filter((k) => k !== "id");
+//     if (keys.length > 0) {
+//       await updateDepartment(payload);
+//     }
+//   };
 
-export default EditInstitute;
+//   return (
+//     <CreateDepartment
+//       editMode
+//       form={form} // TS now happy
+//       loading={updateLod}
+//       onFinish={onFinish}
+//     />
+//   );
+// };
+
+// export default EditInstitute;

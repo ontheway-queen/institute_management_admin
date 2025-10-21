@@ -20,6 +20,7 @@ const authSlice = createSlice({
     setAuth: (state, { payload }: PayloadAction<AuthStateType>) => {
       state.success = payload.success;
       state.token = payload.token;
+      // state.loading = payload.loading;
     },
     clearAuth: (state) => {
       state.success = false;

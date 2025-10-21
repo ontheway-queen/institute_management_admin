@@ -1,14 +1,13 @@
-import { FetchArgs } from '@reduxjs/toolkit/query';
-import api from '../../../app/api/api';
-import { ApiResponse } from '../../../app/utilities/response';
-import { setAuth } from '../../../app/slice/authSlice';
+import { FetchArgs } from "@reduxjs/toolkit/query";
+import api from "../../../app/api/api";
+import { ApiResponse } from "../../../app/utilities/response";
 import {
   ForgotPasswordTypes,
   LoginApiResult,
   LoginTypes,
   MatchEmailOTP,
   SendEmailOTP,
-} from '../types/authTypes';
+} from "../types/authTypes";
 
 const authEndpoint = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,19 +17,6 @@ const authEndpoint = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled;
-        if (data.success) {
-          const { success, token } = data;
-          dispatch(setAuth({ success, token }));
-          // dispatch(
-          //   openNotification({
-          //     description: 'You have successfully logged in.',
-          //   })
-          // );
-        }
-      },
-      // invalidatesTags: ['PROFILE'],
     }),
 
     sendOTP: builder.mutation<ApiResponse<{ email: string }>, SendEmailOTP>({

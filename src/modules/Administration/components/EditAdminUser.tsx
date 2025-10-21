@@ -1,12 +1,12 @@
-import { Form } from 'antd';
-import { useEditAdminUserMutation } from '../api/adminUserApiEndpoints';
+import { Form } from "antd";
+import { useEditAdminUserMutation } from "../api/adminUserApiEndpoints";
 import {
   AdminUserCreateType,
   UserAdminListType,
-} from '../types/adminUserTypes';
-import AdminUserForm from './AdminUserForm';
-import { useEffect, useState } from 'react';
-import { useEditProfileMutation } from '../../Settings/api/profileEndpoint';
+} from "../types/adminUserTypes";
+import AdminUserForm from "./AdminUserForm";
+import { useEffect, useState } from "react";
+// import { useEditProfileMutation } from '../../Settings/api/profileEndpoint';
 
 const EditAdminUser = ({
   id,
@@ -17,8 +17,8 @@ const EditAdminUser = ({
   id: number;
   record: UserAdminListType;
 }) => {
-  const [editAdminUser, { isLoading }] = useEditAdminUserMutation();
-  const [editProfile, { isLoading: profileLod }] = useEditProfileMutation();
+  const [editAdminUser] = useEditAdminUserMutation();
+  // const [editProfile, { isLoading: profileLod }] = useEditProfileMutation();
   const [form] = Form.useForm();
   const [values, setValues] = useState<Partial<AdminUserCreateType>>();
   const onValuesChange = (values: Partial<AdminUserCreateType>) => {
@@ -31,25 +31,25 @@ const EditAdminUser = ({
     if (values) {
       Object.keys(values).forEach((key) => {
         if (
-          key === 'photo' &&
+          key === "photo" &&
           Array.isArray(values.photo) &&
           values.photo.length > 0
         ) {
-          formData.append('photo', values?.photo[0]?.originFileObj);
+          formData.append("photo", values?.photo[0]?.originFileObj);
         } else {
-          if (key !== 'photo') {
+          if (key !== "photo") {
             formData.append(key, String(values[key as keyof typeof values]));
           }
         }
       });
 
       if (isProfile) {
-        await editProfile({ body: formData }).then((e: any) => {
-          if (e?.data?.success) {
-            setValues({});
-            form.resetFields();
-          }
-        });
+        // await editProfile({ body: formData }).then((e: any) => {
+        //   if (e?.data?.success) {
+        //     setValues({});
+        //     form.resetFields();
+        //   }
+        // });
       } else {
         await editAdminUser({ body: formData, id }).then((e: any) => {
           if (e?.data?.success) {
@@ -66,7 +66,7 @@ const EditAdminUser = ({
       const { photo, ...rest } = record;
       form.setFieldsValue({
         ...rest,
-        status: rest.status === 'active' ? true : false,
+        status: rest.status === "active" ? true : false,
       });
     }
   }, [record, form]);
@@ -74,7 +74,7 @@ const EditAdminUser = ({
   console.log(record);
   return (
     <AdminUserForm<Partial<AdminUserCreateType>>
-      loading={isLoading || profileLod}
+      // loading={isLoading || profileLod}
       form={form}
       defaultImageLink={record?.photo}
       editMode

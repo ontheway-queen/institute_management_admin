@@ -47,3 +47,35 @@ export interface IInstituteListResponse {
   data: IInstituteALL[];
   total: number;
 }
+
+export interface IInstituteHead {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  code: string;
+  gender: string;
+  blood_group: string;
+  nid: string;
+}
+
+export interface ISubject {
+  id: number;
+  name: string;
+  code: string;
+  status: boolean;
+  created_by: number;
+  created_by_name: string;
+  created_at: string;
+}
+
+export interface IDepartment {
+  id: number;
+  name: string;
+  code: number;
+  short_name: string;
+  status: boolean;
+  created_by: number;
+  created_by_name: string;
+  created_at: string;
+}
