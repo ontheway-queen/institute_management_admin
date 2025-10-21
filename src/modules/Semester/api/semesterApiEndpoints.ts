@@ -1,14 +1,10 @@
 import { FetchArgs } from "@reduxjs/toolkit/query";
 import api from "../../../app/api/api";
 import { ApiResponse } from "../../../app/utilities/response";
-import {
-  ICreateDepartmentType,
-  IUpdateDepartmentType,
-  ISemesterListType,
-} from "../types/semesterTypes";
+import { ISemesterListType } from "../types/semesterTypes";
 import { IQueryParams } from "../../Administration/types/adminUserTypes";
 
-const departmentApiEndpoints = api.injectEndpoints({
+const semesterApiEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
     getSemesterList: builder.query<
       ApiResponse<ISemesterListType[]>,
@@ -20,17 +16,17 @@ const departmentApiEndpoints = api.injectEndpoints({
       }),
       providesTags: ["SEMESTER"],
     }),
-    createDepartment: builder.mutation<void, ICreateDepartmentType[]>({
+    createSemester: builder.mutation<void, ISemesterListType[]>({
       query: (payload): FetchArgs => ({
         url: "/management/main-semester",
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["DEPARTMENT"],
+      invalidatesTags: ["SEMESTER"],
     }),
-    updateDepartment: builder.mutation<
+    updateSemester: builder.mutation<
       void,
-      Partial<IUpdateDepartmentType> & {
+      Partial<ISemesterListType> & {
         id: number;
       }
     >({
@@ -39,21 +35,21 @@ const departmentApiEndpoints = api.injectEndpoints({
         method: "PATCH",
         body: payload,
       }),
-      invalidatesTags: ["DEPARTMENT"],
+      invalidatesTags: ["SEMESTER"],
     }),
-    deleteDepartment: builder.mutation<void, number>({
+    deleteSemester: builder.mutation<void, number>({
       query: (id): FetchArgs => ({
         url: `/management/main-semester/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["DEPARTMENT"],
+      invalidatesTags: ["SEMESTER"],
     }),
   }),
 });
 
 export const {
-  useCreateDepartmentMutation,
   useGetSemesterListQuery,
-  useUpdateDepartmentMutation,
-  useDeleteDepartmentMutation,
-} = departmentApiEndpoints;
+  useCreateSemesterMutation,
+  useUpdateSemesterMutation,
+  useDeleteSemesterMutation,
+} = semesterApiEndpoints;

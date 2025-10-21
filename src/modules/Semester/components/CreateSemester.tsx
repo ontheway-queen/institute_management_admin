@@ -1,17 +1,22 @@
-import { Form, FormInstance, Row, Col, Button, Input, Radio } from "antd";
+import { Form, FormInstance, Row, Col, Button, Input } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
-import {
-  ICreateDepartmentType,
-  IDepartmentFormValues,
-} from "../types/semesterTypes";
 import FormSubmit from "../../../common/Antd/Form/FormSubmit";
+
+export interface ISemester {
+  id?: number; // optional for edit
+  semester_code: number;
+}
+
+export interface ISemesterFormValues {
+  semesters: ISemester[];
+}
 
 type IProps = {
   loading?: boolean;
-  onFinish?: (values: IDepartmentFormValues) => void;
-  form?: FormInstance<IDepartmentFormValues>;
-  record?: ICreateDepartmentType; // single record for edit
+  onFinish?: (values: ISemesterFormValues) => void;
+  form?: FormInstance<ISemesterFormValues>;
+  record?: ISemester; // single record for edit
   editMode?: boolean;
 };
 
@@ -21,9 +26,10 @@ const CreateSemester = ({
   record,
   editMode = false,
 }: IProps) => {
+  // Initialize form with existing record if editing
   useEffect(() => {
     if (record) {
-      form?.setFieldsValue({ departments: [{ ...record }] });
+      form?.setFieldsValue({ semesters: [{ ...record }] });
     } else {
       form?.resetFields();
     }
@@ -32,70 +38,35 @@ const CreateSemester = ({
   return (
     <Form layout="vertical" form={form} onFinish={onFinish} autoComplete="off">
       <Form.List
-        name="departments"
+        name="semesters"
         initialValue={editMode && record ? [{ ...record }] : [{}]}
       >
         {(fields, { add, remove }) => (
           <>
-            {fields.map(({ key, name: fieldIndex, ...restField }, index) => (
-              <Row gutter={[10, 0]} key={key} align="middle">
-                <Col xs={24} md={6}>
+            {fields.map(({ key, name, ...restField }, index) => (
+              <Row key={key} gutter={[10, 0]} align="middle">
+                <Col xs={24} md={20}>
                   <Form.Item
-                    name={[fieldIndex, "name"]}
-                    label={`Name ${fields.length > 1 ? index + 1 : ""}`}
-                    rules={[{ required: true, message: "Name is required" }]}
                     {...restField}
+                    name={[name, "semester_code"]}
+                    label={`Semester Code ${
+                      fields.length > 1 ? index + 1 : ""
+                    }`}
+                    rules={[
+                      { required: true, message: "Semester code is required" },
+                    ]}
                   >
-                    <Input />
+                    <Input type="number" placeholder="Enter semester code" />
                   </Form.Item>
                 </Col>
-
-                <Col xs={24} md={6}>
-                  <Form.Item
-                    name={[fieldIndex, "code"]}
-                    label="Code"
-                    rules={[{ required: true, message: "Code is required" }]}
-                    {...restField}
-                  >
-                    <Input type="number" />
-                  </Form.Item>
-                </Col>
-
-                <Col xs={24} md={6}>
-                  <Form.Item
-                    name={[fieldIndex, "short_name"]}
-                    label="Short Name"
-                    {...restField}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-
-                {editMode && (
-                  <Col xs={24} md={6}>
-                    <Form.Item
-                      name={[fieldIndex, "status"]}
-                      label="Status"
-                      {...restField}
-                      rules={[
-                        { required: true, message: "Please select status" },
-                      ]}
-                    >
-                      <Radio.Group>
-                        <Radio value={true}>Active</Radio>
-                        <Radio value={false}>Inactive</Radio>
-                      </Radio.Group>
-                    </Form.Item>
-                  </Col>
-                )}
 
                 {!editMode && fields.length > 1 && (
-                  <Col xs={24} md={2}>
+                  <Col xs={24} md={4}>
                     <Button
                       type="text"
                       danger
                       icon={<MinusCircleOutlined />}
-                      onClick={() => remove(fieldIndex)}
+                      onClick={() => remove(name)}
                     />
                   </Col>
                 )}
@@ -111,7 +82,7 @@ const CreateSemester = ({
                     icon={<PlusOutlined />}
                     block
                   >
-                    Add Another Department
+                    Add Another Semester
                   </Button>
                 </Col>
               </Row>
@@ -120,7 +91,10 @@ const CreateSemester = ({
         )}
       </Form.List>
 
-      <FormSubmit name={editMode ? "Update" : "Submit"} />
+      <FormSubmit
+        name={editMode ? "Update" : "Submit"}
+        loading={form?.isFieldsTouched()}
+      />
     </Form>
   );
 };

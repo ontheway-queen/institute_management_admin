@@ -1,7 +1,7 @@
 import { FetchArgs } from "@reduxjs/toolkit/query";
 import api from "../../../app/api/api";
 import { ApiResponse } from "../../../app/utilities/response";
-import { ISubjectListType } from "../types/semesterTypes";
+import { ISubjectListType, IUpdateSubjectType } from "../types/subjectTypes";
 import { IQueryParams } from "../../Administration/types/adminUserTypes";
 
 const subjectApiEndpoints = api.injectEndpoints({
@@ -26,7 +26,7 @@ const subjectApiEndpoints = api.injectEndpoints({
     }),
     updateSubject: builder.mutation<
       void,
-      Partial<ISubjectListType> & {
+      Partial<IUpdateSubjectType> & {
         id: number;
       }
     >({

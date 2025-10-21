@@ -1,49 +1,30 @@
 import { Table } from "antd";
 import Container from "../../../common/Container/Container";
 import CommTableActions from "../../../common/Utilities/CommTableActions";
-import { useAppDispatch } from "../../../app/store";
 import {
-  useCreateSubjectMutation,
   useDeleteSubjectMutation,
   useGetSubjectListQuery,
 } from "../api/subjectApiEndpoints";
 import CommStatusTag from "../../../common/Utilities/CommStatusTag";
-import { setFormInstance } from "../../../app/utilities/formManager";
-import { ISubjectListType } from "../types/semesterTypes";
+import { ISubjectListType } from "../types/subjectTypes";
 import { useForm } from "antd/es/form/Form";
 import useQueryParams from "../../../hooks/useQueryParams";
 import CreateSubject from "../components/CreateSubject";
+import { useDispatch } from "react-redux";
+import { showModal } from "../../../app/slice/modalSlice";
+import EditSubject from "../components/EditSubject";
 
 const SubjectList = () => {
-  const [form] = useForm<ISubjectListType>();
+  const [form] = useForm<{ subjects: ISubjectListType[] }>();
+  const dispatch = useDispatch();
   const [query, setSearchParams] = useQueryParams<{
     limit: string;
     skip: string;
     name: string;
   }>();
-
-  const dispatch = useAppDispatch();
   const { data, isLoading } = useGetSubjectListQuery({ ...query });
-  console.log(data?.data);
-  
-  const [deleteDepartmentList] = useDeleteSubjectMutation();
-  // Handles both create (multiple) and edit (single)
-  const onFinish = async (values: ISubjectListType) => {
-    setFormInstance(form);
+  const [deleteSubject] = useDeleteSubjectMutation();
 
-    await createSubjectList(values);
-  };
-
-  // const handleEdit = (record: IDepartmentListType) => {
-  //   console.log(record);
-  //   dispatch(
-  //     showModal({
-  //       title: "Edit Department",
-  //       width: 900,
-  //       content: <EditDepartment record={record} />,
-  //     })
-  //   );
-  // };
   return (
     <Container
       options={{ showButton: true, showStatus: true, showSearchFilter: true }}
@@ -51,15 +32,13 @@ const SubjectList = () => {
       openModal={{
         title: "Create Subject",
         width: 900,
-        content: (
-          <CreateSubject />
-        ),
+        content: <CreateSubject form={form} />,
       }}
       statusOption={{
         placeholder: "Select Status",
         options: [
           { label: "Active", value: "true" },
-          { label: "InActive", value: "false" },
+          { label: "Inactive", value: "false" },
         ],
       }}
       content={
@@ -124,9 +103,18 @@ const SubjectList = () => {
                 render: (_, record) => (
                   <CommTableActions
                     showDelete
-                    deleteOnConfirm={() => deleteDepartmentList(record?.id)}
+                    deleteOnConfirm={() => deleteSubject(record?.id)}
                     showEdit
-                    // handleEditChange={() => handleEdit(record)}
+                    // You can implement modal edit later:
+                    handleEditChange={() =>
+                      dispatch(
+                        showModal({
+                          title: "Edit Subject",
+                          width: 900,
+                          content: <EditSubject record={record} />,
+                        })
+                      )
+                    }
                   />
                 ),
               },

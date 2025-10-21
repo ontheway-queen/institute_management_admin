@@ -1,69 +1,149 @@
-import { useForm } from "antd/es/form/Form";
-import { useAppDispatch } from "../../../app/store";
+import { useState } from "react";
 import Container from "../../../common/Container/Container";
 import Table from "../../../common/Antd/Table";
-import CommStatusTag from "../../../common/Utilities/CommStatusTag";
-import CommTableActions from "../../../common/Utilities/CommTableActions";
-import { showModal } from "../../../app/slice/modalSlice";
 import { setFormInstance } from "../../../app/utilities/formManager";
-import { IDepartmentFormValues } from "../types/semesterTypes";
 import useQueryParams from "../../../hooks/useQueryParams";
 import {
-  useCreateDepartmentMutation,
-  useDeleteDepartmentMutation,
+  useCreateSemesterMutation,
+  useDeleteSemesterMutation,
   useGetSemesterListQuery,
+  useUpdateSemesterMutation,
 } from "../api/semesterApiEndpoints";
-// import EditDepartment from "../components/EditDepartment";
-import CreateSemester from "../components/CreateSemester";
+import CreateSemester, {
+  ISemesterFormValues,
+  ISemester,
+} from "../components/CreateSemester";
+import CommTableActions from "../../../common/Utilities/CommTableActions";
+import { useForm } from "antd/es/form/Form";
+import { ISemesterListType } from "../types/semesterTypes";
+import { ColumnType } from "antd/es/table";
+import { useDispatch } from "react-redux";
+import { showModal } from "../../../app/slice/modalSlice";
+import EditSemester from "../components/EditSemester";
 
 const SemesterList = () => {
-  const [form] = useForm<IDepartmentFormValues>();
+  const [form] = useForm<ISemesterFormValues>();
+  const [editingSemester, setEditingSemester] = useState<ISemester | null>(
+    null
+  );
   const [query, setSearchParams] = useQueryParams<{
     limit: string;
     skip: string;
     name: string;
   }>();
 
-  const dispatch = useAppDispatch();
-  const { data, isLoading } = useGetSemesterListQuery({ ...query });
-  console.log(data?.data);
-  const [createDepartmentList, { isLoading: createLod }] =
-    useCreateDepartmentMutation();
-  const [deleteDepartmentList] = useDeleteDepartmentMutation();
-  // Handles both create (multiple) and edit (single)
-  const onFinish = async (values: IDepartmentFormValues) => {
+  const { data, isLoading, refetch } = useGetSemesterListQuery({ ...query });
+  const [createSemesterList, { isLoading: createLoading }] =
+    useCreateSemesterMutation();
+  const [updateSemester] = useUpdateSemesterMutation();
+  const [deleteSemester] = useDeleteSemesterMutation();
+  const dispatch = useDispatch();
+  const onFinish = async (values: ISemesterFormValues) => {
     setFormInstance(form);
 
-    await createDepartmentList(values.departments);
+    if (!values.semesters || values.semesters.length === 0) return;
+
+    try {
+      if (editingSemester) {
+        // Edit single semester
+        await updateSemester({
+          id: editingSemester.id!,
+          semester_code: values.semesters[0].semester_code,
+        }).unwrap();
+        setEditingSemester(null);
+      } else {
+        // Create multiple semesters
+        await createSemesterList(values.semesters).unwrap();
+      }
+      form.resetFields();
+      refetch();
+    } catch (error) {
+      console.error("❌ Error submitting:", error);
+    }
   };
 
-  // const handleEdit = (record: IDepartmentListType) => {
-  //   console.log(record);
-  //   dispatch(
-  //     showModal({
-  //       title: "Edit Department",
-  //       width: 900,
-  //       content: <EditDepartment record={record} />,
-  //     })
-  //   );
-  // };
+  const handleEdit = (record: ISemester) => {
+    setEditingSemester(record);
+    form.setFieldsValue({
+      semesters: [{ semester_code: record.semester_code }],
+    });
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteSemester(id).unwrap();
+      refetch();
+    } catch (err) {
+      console.error("❌ Error deleting semester:", err);
+    }
+  };
+
+  const columns: ColumnType<ISemesterListType>[] = [
+    {
+      title: "Semester Code",
+      dataIndex: "semester_code",
+      key: "semester_code",
+    },
+    {
+      title: "Created By",
+      dataIndex: "created_by_name",
+      key: "created_by_name",
+    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   align: "center",
+    //   width: 120,
+    //   render: (_: any, record: ISemester) => (
+    //     <CommTableActions
+    //       showEdit
+    //       showDelete
+    //       handleEditChange={() => handleEdit(record)}
+    //       deleteOnConfirm={() => handleDelete(record.id!)}
+    //     />
+    //   ),
+    // },
+    {
+      title: "Action",
+      key: "action",
+      align: "center",
+      width: 110,
+      render: (_, record) => (
+        <CommTableActions
+          showDelete
+          deleteOnConfirm={() => handleDelete(record.id!)}
+          showEdit
+          // You can implement modal edit later:
+          handleEditChange={() =>
+            dispatch(
+              showModal({
+                title: "Edit Subject",
+                width: 900,
+                content: <EditSemester record={record} />,
+              })
+            )
+          }
+        />
+      ),
+    },
+  ];
+
   return (
     <Container
-      options={{ showButton: true, showStatus: true, showSearchFilter: true }}
+      options={{ showButton: true, showStatus: false, showSearchFilter: true }}
       title="Semester List"
       openModal={{
-        title: "Create Semester",
-        width: 900,
+        title: editingSemester ? "Edit Semester" : "Create Semester",
+        width: 600,
         content: (
-          <CreateSemester form={form} loading={createLod} onFinish={onFinish} />
+          <CreateSemester
+            form={form}
+            loading={createLoading}
+            editMode={!!editingSemester}
+            record={editingSemester || undefined}
+            onFinish={onFinish}
+          />
         ),
-      }}
-      statusOption={{
-        placeholder: "Select Status",
-        options: [
-          { label: "Active", value: "true" },
-          { label: "InActive", value: "false" },
-        ],
       }}
       content={
         <div style={{ marginTop: 12 }}>
@@ -79,7 +159,7 @@ const SemesterList = () => {
                 setSearchParams({
                   skip:
                     current === 1
-                      ? String(current - 1)
+                      ? "0"
                       : String(
                           current * Number(query.limit) - Number(query.limit)
                         ),
@@ -92,38 +172,7 @@ const SemesterList = () => {
               total: Number(data?.total || 0),
               showTotal: (total) => `Total ${total}`,
             }}
-            columns={[
-              {
-                title: "Semester Code",
-                dataIndex: "semester_code",
-                key: "semester_code",
-              },
-
-              // {
-              //   title: "Status",
-              //   key: "status",
-              //   align: "center",
-              //   render: (_, record) => (
-              //     <CommStatusTag
-              //       status={record?.status ? "Active" : "Inactive"}
-              //     />
-              //   ),
-              // },
-              // {
-              //   title: "Action",
-              //   key: "action",
-              //   align: "center",
-              //   width: 110,
-              //   render: (_, record) => (
-              //     <CommTableActions
-              //       showDelete
-              //       deleteOnConfirm={() => deleteDepartmentList(record?.id)}
-              //       showEdit
-              //       handleEditChange={() => handleEdit(record)}
-              //     />
-              //   ),
-              // },
-            ]}
+            columns={columns}
           />
         </div>
       }

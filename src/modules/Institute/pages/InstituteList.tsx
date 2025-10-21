@@ -1,64 +1,94 @@
-import { useForm } from "antd/es/form/Form";
-import { useAppDispatch } from "../../../app/store";
 import Container from "../../../common/Container/Container";
-import Table from "../../../common/Antd/Table";
-import CommStatusTag from "../../../common/Utilities/CommStatusTag";
-import CommTableActions from "../../../common/Utilities/CommTableActions";
-import { showModal } from "../../../app/slice/modalSlice";
-import { setFormInstance } from "../../../app/utilities/formManager";
-import {
-  IDepartmentFormValues,
-  IDepartmentListType,
-} from "../types/instituteTypes";
-import CreateDepartment from "../components/CreateDepartment";
+
+import { useGetInstituteListQuery } from "../api/instituteApiEndpoints";
+import { Table } from "antd";
 import useQueryParams from "../../../hooks/useQueryParams";
-import {
-  useCreateDepartmentMutation,
-  useDeleteDepartmentMutation,
-  useGetDepartmentListQuery,
-} from "../api/instituteApiEndpoints";
-import EditDepartment from "../components/EditInstitute";
-import EditInstitute from "../components/EditInstitute";
-import { Navigate } from "react-router-dom";
+import CommTableActions from "../../../common/Utilities/CommTableActions";
+import { imgUrl2 } from "../../../app/utilities/baseQuery";
+import { IInstituteALL } from "../types/instituteTypes";
+import { ColumnsType } from "antd/es/table";
 
 const InstituteList = () => {
-  const [form] = useForm<IDepartmentFormValues>();
   const [query, setSearchParams] = useQueryParams<{
     limit: string;
     skip: string;
     name: string;
   }>();
+  const columns: ColumnsType<IInstituteALL> = [
+    {
+      title: "Institute",
+      key: "institute",
+      render: (_: any, record: IInstituteALL) => (
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <img
+            src={`${imgUrl2}${record.institute_logo}`}
+            alt={record.institute_name}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
+          <span style={{ fontWeight: 500 }}>{record.institute_name}</span>
+        </div>
+      ),
+    },
 
-  const dispatch = useAppDispatch();
-  const { data, isLoading } = useGetDepartmentListQuery({ ...query });
-  console.log(data?.data);
-  const [createInstituteList, { isLoading: createLod }] =
-    useCreateInstituteMutation();
-  const [deleteDepartmentList] = useDeleteDepartmentMutation();
-  // Handles both create (multiple) and edit (single)
-  const onFinish = async (values: IDepartmentFormValues) => {
-    setFormInstance(form);
+    {
+      title: "Institution Code",
+      dataIndex: "institution_code",
+      key: "institution_code",
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+    },
+    {
+      title: "Email",
+      dataIndex: "institute_email",
+      key: "institute_email",
+    },
 
-    await createInstituteList(values.departments);
-  };
-  // const handleCreateInstitute = () => {
-  //   Navigate("/institute/create"); // redirect
-  // };
-  const handleEdit = (record: IDepartmentListType) => {
-    console.log(record);
-    dispatch(
-      showModal({
-        title: "Edit Department",
-        width: 900,
-        content: <EditInstitute record={record} />,
-      })
-    );
-  };
+    {
+      title: "Website",
+      dataIndex: "institute_website",
+      key: "institute_website",
+      render: (website: string) => (
+        <a href={`https://${website}`} target="_blank" rel="noreferrer">
+          {website}
+        </a>
+      ),
+    },
+
+    {
+      title: "Action",
+      key: "action",
+      align: "center",
+      width: 110,
+      render: (_, record) => (
+        <CommTableActions
+          showDelete
+          // deleteOnConfirm={() => deleteInstitute(record.id)}
+          // showEdit
+          // handleEditChange={() => handleEdit(record)}
+        />
+      ),
+    },
+  ];
+  const { data, isLoading } = useGetInstituteListQuery({ ...query });
+  const instituteData: IInstituteALL[] = Array.isArray(data?.data)
+    ? data.data
+    : data?.data
+    ? [data.data]
+    : [];
+
   return (
     <Container
       options={{ showButton: true, showStatus: true, showSearchFilter: true }}
       title="Institute List"
-      buttonLink={"/management/create"}
+      buttonLink={"/institute/create"}
       statusOption={{
         placeholder: "Select Status",
         options: [
@@ -66,14 +96,16 @@ const InstituteList = () => {
           { label: "InActive", value: "false" },
         ],
       }}
+      // content={<div>shakil</div>}
       content={
         <div style={{ marginTop: 12 }}>
-          <Table
+          <Table<IInstituteALL>
             scroll={{ x: 500 }}
             loading={isLoading}
             bordered
             size="small"
-            dataSource={data?.data || []}
+            columns={columns}
+            dataSource={instituteData}
             rowKey="id"
             pagination={{
               onChange(current, size) {
@@ -93,39 +125,6 @@ const InstituteList = () => {
               total: Number(data?.total || 0),
               showTotal: (total) => `Total ${total}`,
             }}
-            columns={[
-              { title: "Name", dataIndex: "name", key: "name" },
-              {
-                title: "Short name",
-                dataIndex: "short_name",
-                key: "short_name",
-              },
-              { title: "Code", dataIndex: "code", key: "code" },
-              {
-                title: "Status",
-                key: "status",
-                align: "center",
-                render: (_, record) => (
-                  <CommStatusTag
-                    status={record?.status ? "Active" : "Inactive"}
-                  />
-                ),
-              },
-              {
-                title: "Action",
-                key: "action",
-                align: "center",
-                width: 110,
-                render: (_, record) => (
-                  <CommTableActions
-                    showDelete
-                    deleteOnConfirm={() => deleteDepartmentList(record?.id)}
-                    showEdit
-                    handleEditChange={() => handleEdit(record)}
-                  />
-                ),
-              },
-            ]}
           />
         </div>
       }

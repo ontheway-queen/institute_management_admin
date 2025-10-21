@@ -12,41 +12,11 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useGetDepartmentListQuery } from "../api/instituteApiEndpoints";
 import useQueryParams from "../../../hooks/useQueryParams";
-
-interface IInstitutePayload {
-  institute: {
-    institution_code: string;
-    established_year: string;
-    name: string;
-    phone: string;
-    email: string;
-    website: string;
-    category: string;
-    ownership: string;
-    address: string;
-    postal_code: string;
-  };
-  instituteHead: {
-    name: string;
-    email: string;
-    password: string;
-    phone: string;
-    gender: string;
-    blood_group: string;
-    nid: string;
-  };
-  institute_logo: File;
-  institute_head_photo: File;
-  subjects: number[];
-  departments: number[];
-}
-
-// interface CreateInstituteProps {
-//   subjectsOptions: { label: string; value: number }[];
-//   departmentsOptions: { label: string; value: number }[];
-// }
+import { useGetSubjectListQuery } from "../../Subject/api/subjectApiEndpoints";
+import { useGetDepartmentListQuery } from "../../Department/api/departmentApiEndpoints";
+import { useCreateInstituteMutation } from "../api/instituteApiEndpoints";
+import { IInstitute } from "../types/instituteTypes";
 
 const CreateInstitute: React.FC = () => {
   const [form] = Form.useForm();
@@ -56,7 +26,11 @@ const CreateInstitute: React.FC = () => {
     skip: string;
     name: string;
   }>();
+  const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const { data: departmentData, isLoading } = useGetDepartmentListQuery({
+    ...query,
+  });
+  const { data: subjectData } = useGetSubjectListQuery({
     ...query,
   });
 
@@ -64,20 +38,23 @@ const CreateInstitute: React.FC = () => {
     label: dept.name, // what user sees
     value: dept.id, // what gets submitted
   }));
-  //   const subjectOptions = subjectData?.data?.map((sub) => ({
-  //     label: sub.name, // what user sees
-  //     value: sub.id, // what gets submitted
-  //   }));
+  const subjectOptions = subjectData?.data?.map((sub) => ({
+    label: sub.name, // what user sees
+    value: sub.id, // what gets submitted
+  }));
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [headPhotoFile, setHeadPhotoFile] = useState<File | null>(null);
 
-  const handleSubmit = async (values: any) => {
+  const [createInstitute, { isLoading: createLoading }] =
+    useCreateInstituteMutation();
+
+  const onFinish = async (values: any) => {
     if (!logoFile || !headPhotoFile) {
       message.error("Please upload both institute logo and head photo.");
       return;
     }
 
-    const payload: IInstitutePayload = {
+    const payload: IInstitute = {
       institute: {
         institution_code: values.institution_code,
         established_year: values.established_year,
@@ -101,8 +78,8 @@ const CreateInstitute: React.FC = () => {
       },
       institute_logo: logoFile,
       institute_head_photo: headPhotoFile,
-      subjects: values.subjects,
-      departments: values.departments,
+      subjects: values.subjects, // array of IDs from Select
+      departments: values.departments, // array of IDs from Select
     };
 
     const formData = new FormData();
@@ -110,33 +87,29 @@ const CreateInstitute: React.FC = () => {
     formData.append("institute_head_photo", payload.institute_head_photo);
     formData.append("institute", JSON.stringify(payload.institute));
     formData.append("instituteHead", JSON.stringify(payload.instituteHead));
-    payload.subjects.forEach((id) =>
-      formData.append("subjects[]", id.toString())
-    );
-    payload.departments.forEach((id) =>
-      formData.append("departments[]", id.toString())
-    );
+
+    // Append each subject ID to FormData
+
+    formData.append("subjects", JSON.stringify(payload.subjects));
+
+    formData.append("departments", JSON.stringify(payload.departments));
 
     try {
-      const res = await fetch("/api/institute", {
-        method: "POST",
-        body: formData,
-      });
-      if (res.ok) {
-        message.success("Institute created successfully!");
-        form.resetFields();
-        navigate("/institutes");
-      } else {
-        message.error("Failed to create institute.");
-      }
+      console.log("FormData contents:");
+      formData.forEach((value, key) => console.log(key, value));
+
+      await createInstitute(formData).unwrap(); // RTK Query mutation
+
+      message.success("Institute created successfully!");
+      form.resetFields();
+      navigate("/institute/list");
     } catch (err) {
       console.error(err);
       message.error("Error occurred while creating institute.");
     }
   };
-
   return (
-    <Form layout="vertical" form={form} onFinish={handleSubmit}>
+    <Form layout="vertical" form={form} onFinish={onFinish}>
       <Row gutter={16}>
         <Col xs={24} lg={12}>
           <Card
@@ -161,7 +134,20 @@ const CreateInstitute: React.FC = () => {
             <Form.Item
               name="established_year"
               label="Established Year"
-              rules={[{ required: true }]}
+              rules={[
+                { required: true, message: "Established year is required" },
+                {
+                  validator: (_, value) => {
+                    if (!value) return Promise.resolve(); // required rule will catch empty
+                    const year = Number(value);
+                    if (isNaN(year))
+                      return Promise.reject("Year must be a number");
+                    if (year < 1800)
+                      return Promise.reject("Year must be 1800 or later");
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
               <Input placeholder="Enter year" />
             </Form.Item>
@@ -174,12 +160,24 @@ const CreateInstitute: React.FC = () => {
             <Form.Item name="website" label="Website">
               <Input placeholder="Enter website URL" />
             </Form.Item>
+
             <Form.Item name="category" label="Category">
-              <Input placeholder="Enter category" />
+              <Select
+                options={[
+                  { label: "Polytechnic", value: "polytechnic" },
+                  { label: "School", value: "school" },
+                ]}
+              />
             </Form.Item>
             <Form.Item name="ownership" label="Ownership">
-              <Input placeholder="Enter ownership type" />
+              <Select
+                options={[
+                  { label: "Public", value: "public" },
+                  { label: "Private", value: "private" },
+                ]}
+              />
             </Form.Item>
+
             <Form.Item name="address" label="Address">
               <Input placeholder="Enter address" />
             </Form.Item>
@@ -237,13 +235,26 @@ const CreateInstitute: React.FC = () => {
             <Form.Item name="head_gender" label="Gender">
               <Select
                 options={[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
+                  { label: "পুরুষ", value: "পুরুষ" },
+                  { label: "মহিলা", value: "মহিলা" },
                 ]}
               />
             </Form.Item>
-            <Form.Item name="head_blood_group" label="Blood Group">
-              <Input placeholder="Enter blood group" />
+
+            <Form.Item
+              name="head_blood_group"
+              label="Blood Group"
+              rules={[
+                { required: true, message: "Please select a blood group" },
+              ]}
+            >
+              <Select placeholder="Select blood group">
+                {BLOOD_GROUPS.map((bg) => (
+                  <Select.Option key={bg} value={bg}>
+                    {bg}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item name="head_nid" label="NID">
               <Input placeholder="Enter NID" />
@@ -264,7 +275,7 @@ const CreateInstitute: React.FC = () => {
       </Row>
 
       <Row gutter={16}>
-        {/* <Col xs={24} lg={12}>
+        <Col xs={24} lg={12}>
           <Form.Item
             name="subjects"
             label="Subjects"
@@ -276,7 +287,7 @@ const CreateInstitute: React.FC = () => {
               placeholder="Select subjects"
             />
           </Form.Item>
-        </Col> */}
+        </Col>
         <Col xs={24} lg={12}>
           <Form.Item
             name="departments"

@@ -1,7 +1,7 @@
 import { ColProps, SelectProps } from "antd";
 import { FormItemSelect } from "../../../common/Antd/Form/FormItems";
 import CommSelectFieldSearch from "../../../common/Utilities/CommSelectFieldSearch";
-import { useGetDepartmentListQuery } from "../api/semesterApiEndpoints";
+import { useGetSubjectListQuery } from "../api/subjectApiEndpoints";
 
 type IProps = {
   colProps?: ColProps | undefined;
@@ -15,7 +15,7 @@ const CommDepartmentList = ({
   ComponentProps,
   required,
 }: IProps) => {
-  const { data } = useGetDepartmentListQuery({ status: true });
+  const { data } = useGetSubjectListQuery({ status: true });
   return (
     <CommSelectFieldSearch>
       <FormItemSelect
