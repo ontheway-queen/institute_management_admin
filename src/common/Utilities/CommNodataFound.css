@@ -1,0 +1,58 @@
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    50% {
+        transform: rotateY(180deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.comm-nodata-card {
+    height: 100%;
+    text-align: center;
+    padding: 32px;
+    perspective: 800px;
+
+}
+
+.comm-nodata-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.comm-nodata-icon {
+    font-size: 64px;
+    color: rgba(0, 0, 0, 0.25);
+    animation: flip 4s linear infinite;
+    transform-style: preserve-3d;
+}
+
+.comm-nodata-title {
+    margin: 0;
+    color: #333;
+}
+
+.comm-nodata-text {
+    max-width: 400px;
+    font-size: 15px;
+    color: #555;
+}
+
+.comm-nodata-button {
+    margin-top: 24px;
+    border-radius: 8px;
+    padding: 0 20px;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+    transition: transform 0.2s;
+}
+
+.comm-nodata-button:hover {
+    transform: translateY(-2px);
+}

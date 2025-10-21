@@ -1,0 +1,15 @@
+:root {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+.antd-upload-with>.ant-upload {
+  width: 100%;
+}
