@@ -3,7 +3,7 @@ import React from "react";
 import Iconify from "../../../config/IconifyConfig";
 import { logo } from "../../../utilities/images";
 // import { useGetProfileQuery } from '../../../modules/Settings/api/profileEndpoint';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/store";
 import { clearAuth } from "../../../app/slice/authSlice";
 import api from "../../../app/api/api";

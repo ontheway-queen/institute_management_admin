@@ -2,7 +2,7 @@ import { FetchArgs } from "@reduxjs/toolkit/query";
 import api from "../../../app/api/api";
 import { ApiResponse } from "../../../app/utilities/response";
 import { IQueryParams } from "../../Administration/types/adminUserTypes";
-import { IInstituteALL, IUpdateInstitute } from "../types/instituteTypes";
+import { IInstituteALL } from "../types/instituteTypes";
 
 const instituteApiEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({

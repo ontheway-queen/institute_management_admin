@@ -9,11 +9,10 @@ import {
 } from "antd";
 import React from "react";
 import Iconify from "../../../config/IconifyConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/store";
 import { clearAuth } from "../../../app/slice/authSlice";
 import api from "../../../app/api/api";
-import { imgUrl } from "../../../app/utilities/baseQuery";
 import { ThemeState } from "../../../app/slice/themeSlice";
 
 interface Props {
