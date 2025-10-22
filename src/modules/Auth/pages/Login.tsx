@@ -42,7 +42,7 @@ const Login: React.FC = () => {
       const { success, token, data: loginData } = await login(data).unwrap();
       if (success && token && !loginData?.is_2fa_on) {
         navigate("/");
-        dispatch(setAuth({ token: token, success}));
+        dispatch(setAuth({ token: token, success }));
       } else if (loginData?.is_2fa_on && loginData?.email) {
         navigate(`/auth/match-otp?email=${loginData.email}&type=verify_admin`);
       }
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
             <div className="login-logo-container">
               <img src={logo} alt="Logo" className="login-logo-img" />
               <Title level={3} className="logo-title">
-                Institute Management
+                Institute Management Admin
               </Title>
             </div>
 
