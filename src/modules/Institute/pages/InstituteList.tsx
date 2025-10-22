@@ -73,8 +73,12 @@ const InstituteList = () => {
         <CommTableActions
           showDelete
           showView
+          showEdit
           handleViewChange={() => {
             if (record.id !== undefined) handleView(record.id);
+          }}
+          handleEditChange={() => {
+            if (record.id !== undefined) handleEdit(record.id);
           }}
           // handleEditChange={() => handleEdit(record.id)}
         />
@@ -85,6 +89,9 @@ const InstituteList = () => {
   const handleView = (id: number) => {
     // Navigate to /institute/view/:id
     navigate(`/institute/view/${id}`);
+  };
+  const handleEdit = (id: number) => {
+    navigate(`/institute/edit/${id}`);
   };
   const { data, isLoading } = useGetInstituteListQuery({ ...query });
   const instituteData: IInstituteALL[] = Array.isArray(data?.data)

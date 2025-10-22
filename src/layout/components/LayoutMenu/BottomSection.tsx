@@ -92,18 +92,18 @@ const BottomSection: React.FC<Props> = ({ collapsed }) => {
         {collapsed
           ? undefined
           : [
-              <Link to={"/settings"}>
-                <Button
-                  type="text"
-                  icon={<Iconify icon="tabler:settings" />}
-                  style={{
-                    fontWeight: "bold",
-                    padding: "22px",
-                  }}
-                >
-                  Profile
-                </Button>
-              </Link>,
+              // <Link to={"/settings"}>
+              //   <Button
+              //     type="text"
+              //     icon={<Iconify icon="tabler:settings" />}
+              //     style={{
+              //       fontWeight: "bold",
+              //       padding: "22px",
+              //     }}
+              //   >
+              //     Profile
+              //   </Button>
+              // </Link>,
               <Button
                 type="text"
                 danger

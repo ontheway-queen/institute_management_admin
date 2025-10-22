@@ -2,7 +2,7 @@ import { FetchArgs } from "@reduxjs/toolkit/query";
 import api from "../../../app/api/api";
 import { ApiResponse } from "../../../app/utilities/response";
 import { IQueryParams } from "../../Administration/types/adminUserTypes";
-import { IInstituteALL } from "../types/instituteTypes";
+import { IInstituteALL, IUpdateInstitute } from "../types/instituteTypes";
 
 const instituteApiEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -49,19 +49,13 @@ const instituteApiEndpoints = api.injectEndpoints({
       },
       invalidatesTags: ["INSTITUTE"],
     }),
-    // updateDepartment: builder.mutation<
-    //   void,
-    //   Partial<IUpdateDepartmentType> & {
-    //     id: number;
-    //   }
-    // >({
-    //   query: ({ id, ...payload }): FetchArgs => ({
-    //     url: `/management/management/${id}`,
-    //     method: "PATCH",
-    //     body: payload,
-    //   }),
-    //   invalidatesTags: ["DEPARTMENT"],
-    // }),
+    updateInstitute: builder.mutation<any, { id: number; formData: FormData }>({
+      query: ({ id, formData }) => ({
+        url: `/management/institute/${id}`,
+        method: "PATCH",
+        body: formData,
+      }),
+    }),
     // deleteDepartment: builder.mutation<void, number>({
     //   query: (id): FetchArgs => ({
     //     url: `/management/management/${id}`,
@@ -76,6 +70,6 @@ export const {
   useCreateInstituteMutation,
   useGetInstituteListQuery,
   useGetSingleInstituteQuery,
-  // useUpdateDepartmentMutation,
+  useUpdateInstituteMutation,
   // useDeleteDepartmentMutation,
 } = instituteApiEndpoints;

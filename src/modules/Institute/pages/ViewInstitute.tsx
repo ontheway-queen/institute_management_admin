@@ -2,9 +2,10 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetSingleInstituteQuery } from "../api/instituteApiEndpoints";
 import { IInstituteALL } from "../types/instituteTypes";
-import { Card, Row, Col, Table } from "antd";
+import { Card, Row, Col, Table, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { imgUrl2 } from "../../../app/utilities/baseQuery";
+import { CaretLeftOutlined } from "@ant-design/icons";
 
 const ViewInstitute: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,7 +13,7 @@ const ViewInstitute: React.FC = () => {
 
   const { data, isLoading } = useGetSingleInstituteQuery({ id: Number(id) });
   const institute: IInstituteALL | undefined = data?.data;
-
+  console.log(institute);
   // Columns for subjects table
   const subjectColumns: ColumnsType<any> = [
     { title: "Name", dataIndex: "name", key: "name" },
@@ -41,6 +42,10 @@ const ViewInstitute: React.FC = () => {
 
   return (
     <div>
+      <Button style={{ marginBottom: 5 }} onClick={() => navigate(-1)}>
+        <CaretLeftOutlined />
+        Back
+      </Button>
       <Card title="Institute Information" style={{ marginBottom: 20 }}>
         <Row gutter={16}>
           <Col xs={24} lg={6}>
@@ -87,24 +92,60 @@ const ViewInstitute: React.FC = () => {
       </Card>
 
       <Card title="Institute Head Information" style={{ marginBottom: 20 }}>
-        <p>
-          <b>Name:</b> {institute.institute_head.name}
-        </p>
-        <p>
-          <b>Email:</b> {institute.institute_head.email}
-        </p>
-        <p>
-          <b>Phone:</b> {institute.institute_head.phone}
-        </p>
-        <p>
-          <b>Gender:</b> {institute.institute_head.gender}
-        </p>
-        <p>
-          <b>Blood Group:</b> {institute.institute_head.blood_group}
-        </p>
-        <p>
-          <b>NID:</b> {institute.institute_head.nid}
-        </p>
+        <Row gutter={[16, 16]} align="middle">
+          {/* Head Photo */}
+          <Col xs={24} sm={8} md={6} lg={4}>
+            <img
+              src={
+                imgUrl2 + institute?.institute_head?.photo || "/placeholder.png"
+              }
+              alt={institute?.institute_head?.name}
+              style={{
+                width: "100%",
+                maxWidth: 150,
+                borderRadius: 8,
+                objectFit: "cover",
+              }}
+            />
+          </Col>
+
+          {/* Head Info */}
+          <Col xs={24} sm={16} md={18} lg={20}>
+            <Row gutter={[8, 8]}>
+              <Col span={12}>
+                <p>
+                  <b>Name:</b> {institute?.institute_head?.name || "-"}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
+                  <b>Email:</b> {institute?.institute_head?.email || "-"}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
+                  <b>Phone:</b> {institute?.institute_head?.phone || "-"}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
+                  <b>Gender:</b> {institute?.institute_head?.gender || "-"}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
+                  <b>Blood Group:</b>{" "}
+                  {institute?.institute_head?.blood_group || "-"}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
+                  <b>NID:</b> {institute?.institute_head?.nid || "-"}
+                </p>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Card>
 
       <Card title="Subjects" style={{ marginBottom: 20 }}>
@@ -124,8 +165,6 @@ const ViewInstitute: React.FC = () => {
           pagination={false}
         />
       </Card>
-
-      <button onClick={() => navigate(-1)}>Back</button>
     </div>
   );
 };

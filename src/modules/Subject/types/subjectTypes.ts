@@ -2,7 +2,7 @@
 export interface ISubjectListType {
   id: number;
   name: string;
-  code: number;
+  code: number | string;
   status: boolean;
   created_by?: number;
   created_by_name?: string;

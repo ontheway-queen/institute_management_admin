@@ -88,7 +88,7 @@ const LayoutHeader: React.FC<Props> = ({
                 fontSize: xs ? "12px" : "16px",
               }}
             >
-              Hello, 
+              Hello,
               {/* {data?.data?.name} */}
             </Typography.Text>
           </div>
@@ -100,11 +100,11 @@ const LayoutHeader: React.FC<Props> = ({
           <Dropdown
             menu={{
               items: [
-                {
-                  key: "1",
-                  label: <Link to="/settings">Profile</Link>,
-                  icon: <Iconify icon="ic:round-settings" />,
-                },
+                // {
+                //   key: "1",
+                //   label: <Link to="/settings">Profile</Link>,
+                //   icon: <Iconify icon="ic:round-settings" />,
+                // },
                 {
                   key: "3",
                   label: "Logout",

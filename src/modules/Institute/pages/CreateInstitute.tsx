@@ -10,7 +10,7 @@ import {
   Col,
   Card,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useQueryParams from "../../../hooks/useQueryParams";
 import { useGetSubjectListQuery } from "../../Subject/api/subjectApiEndpoints";
@@ -86,7 +86,7 @@ const CreateInstitute: React.FC = () => {
     formData.append("institute_logo", payload.institute_logo);
     formData.append("institute_head_photo", payload.institute_head_photo);
     formData.append("institute", JSON.stringify(payload.institute));
-    formData.append("instituteHead", JSON.stringify(payload.instituteHead));
+    formData.append("institute_head", JSON.stringify(payload.instituteHead));
 
     // Append each subject ID to FormData
 
@@ -110,6 +110,10 @@ const CreateInstitute: React.FC = () => {
   };
   return (
     <Form layout="vertical" form={form} onFinish={onFinish}>
+      <Button style={{ marginBottom: 5 }} onClick={() => navigate(-1)}>
+        <CaretLeftOutlined />
+        Back
+      </Button>
       <Row gutter={16}>
         <Col xs={24} lg={12}>
           <Card

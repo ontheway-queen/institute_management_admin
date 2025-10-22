@@ -20,15 +20,21 @@ export const navigationMenu: NavigationItem[] = [
     icon: "streamline:dashboard-circle-solid",
   },
   {
+    key: "/institute/list",
+    to: "/institute/list",
+    label: "Institute List",
+    icon: icons.list,
+  },
+  {
     key: "/department/list",
     to: "/department/list",
     label: "Department List",
     icon: icons.list,
   },
   {
-    key: "/institute/list",
-    to: "/institute/list",
-    label: "Institute List",
+    key: "/subject/list",
+    to: "/subject/list",
+    label: "Subject List",
     icon: icons.list,
   },
   {
@@ -119,12 +125,6 @@ export const navigationMenu: NavigationItem[] = [
   //   ],
   // },
 
-  {
-    key: "/subject/list",
-    to: "/subject/list",
-    label: "Subject List",
-    icon: icons.list,
-  },
   // {
   //   key: "/configuration",
   //   to: "/configuration",
