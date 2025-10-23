@@ -129,6 +129,11 @@ const ViewInstitute: React.FC = () => {
               </Col>
               <Col span={12}>
                 <p>
+                  <b>Code:</b> {institute?.institute_head?.code || "-"}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
                   <b>Gender:</b> {institute?.institute_head?.gender || "-"}
                 </p>
               </Col>

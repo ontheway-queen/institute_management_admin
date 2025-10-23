@@ -101,7 +101,7 @@
 
 // export default CreateSemester;
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Form, Row, Col, Button, InputNumber } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import FormSubmit from "../../../common/Antd/Form/FormSubmit";
