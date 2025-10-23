@@ -1,66 +1,76 @@
 import { useEffect } from "react";
-import { useForm } from "antd/es/form/Form";
-import CreateSemester, {
-  ISemester,
-  ISemesterFormValues,
-} from "./CreateSemester";
-import { setFormInstance } from "../../../app/utilities/formManager";
-import { useUpdateSemesterMutation } from "../api/semesterApiEndpoints";
+import { Form, InputNumber } from "antd";
+import FormSubmit from "../../../common/Antd/Form/FormSubmit";
+import {
+  useUpdateSemesterMutation,
+  useGetSemesterListQuery,
+} from "../api/semesterApiEndpoints";
 
-type IProps = {
-  record: ISemester; // single semester to edit
-  onSuccess?: () => void; // optional callback after successful update
-};
+interface IProps {
+  id: number; // ID of semester to edit
+}
 
-const EditSemester = ({ record, onSuccess }: IProps) => {
-  const [form] = useForm<ISemesterFormValues>();
-  const [updateSemester, { isLoading, isSuccess }] =
-    useUpdateSemesterMutation();
+const EditSemester = ({ id }: IProps) => {
+  const [form] = Form.useForm();
+  const { data: semester } = useGetSemesterListQuery(
+    { limit: "1", skip: "0" },
+    {
+      selectFromResult: ({ data }) => ({
+        data: data?.data?.find((s) => s.id === id),
+      }),
+    }
+  );
+  const [updateSemester, { isLoading }] = useUpdateSemesterMutation();
 
   useEffect(() => {
-    if (record) {
+    if (semester) {
       form.setFieldsValue({
-        semesters: [{ semester_code: record.semester_code }],
+        semesters: [{ semester_code: semester.semester_code }],
       });
-    } else {
-      form.resetFields();
     }
-  }, [record, form]);
+  }, [semester, form]);
 
-  useEffect(() => {
-    if (isSuccess) {
-      form.resetFields();
-      onSuccess?.();
-    }
-  }, [isSuccess, form, onSuccess]);
-
-  const onFinish = async (values: ISemesterFormValues) => {
-    setFormInstance(form);
-
-    const updated = values.semesters[0];
-    if (!record.id) return;
-
-    const payload = {
-      id: record.id, // <-- must include ID
-      semester_code: updated.semester_code,
-    };
-
+  const handleFinish = async (values: any) => {
+    if (!semester) return;
     try {
-      await updateSemester(payload).unwrap();
-      console.log("✅ Semester updated:", payload);
+      await updateSemester({
+        id: semester.id!,
+        semester_code: values.semesters[0].semester_code,
+      }).unwrap();
+      form.resetFields();
     } catch (err) {
-      console.error("❌ Update failed:", err);
+      console.error("❌ Error updating semester:", err);
     }
   };
 
   return (
-    <CreateSemester
+    <Form
       form={form}
-      editMode
-      record={record}
-      loading={isLoading}
-      onFinish={onFinish}
-    />
+      layout="vertical"
+      onFinish={handleFinish}
+      autoComplete="off"
+    >
+      <Form.List name="semesters" initialValue={[semester || {}]}>
+        {(fields) => (
+          <>
+            {fields.map(({ key, name, ...restField }) => (
+              <Form.Item
+                {...restField}
+                key={key}
+                name={[name, "semester_code"]}
+                label="Semester Code"
+                rules={[
+                  { required: true, message: "Semester code is required" },
+                ]}
+              >
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            ))}
+          </>
+        )}
+      </Form.List>
+      <FormSubmit name="Update" loading={isLoading} />
+    </Form>
   );
 };
 
