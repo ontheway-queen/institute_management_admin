@@ -1,36 +1,57 @@
 
-import {
-  Form,
-  FormInstance,
-  Row,
-  Col,
-  Button,
-  Input,
-  Radio,
-  InputNumber,
-} from "antd";
+
+import { Form, Row, Col, Button, Input, Radio, InputNumber } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import FormSubmit from "../../../common/Antd/Form/FormSubmit";
-import { useCreateSubjectMutation } from "../api/subjectApiEndpoints";
+import {
+  useCreateSubjectMutation,
+  useUpdateSubjectMutation,
+} from "../api/subjectApiEndpoints";
 import { ISubjectListType } from "../types/subjectTypes";
+import { useEffect } from "react";
 
 type IProps = {
-  loading?: boolean;
-  onFinish?: (values: { subjects: ISubjectListType[] }) => void;
-  form?: FormInstance<{ subjects: ISubjectListType[] }>;
-  record?: ISubjectListType;
   editMode?: boolean;
+  record?: ISubjectListType;
 };
 
-const CreateSubject = ({ form, record, editMode, onFinish }: IProps) => {
-  const [createSubjectList, { isLoading }] = useCreateSubjectMutation();
+const CreateSubject = ({ editMode = false, record }: IProps) => {
+  const [form] = Form.useForm<{ subjects: ISubjectListType[] }>();
+  const [createSubject, { isLoading: creating }] = useCreateSubjectMutation();
+  const [updateSubject, { isLoading: updating }] = useUpdateSubjectMutation();
+
+  // Initialize form if editing
+  useEffect(() => {
+    if (editMode && record) {
+      form.setFieldsValue({
+        subjects: [{ ...record }],
+      });
+    } else {
+      form.setFieldsValue({ subjects: [{}] });
+    }
+  }, [editMode, record, form]);
 
   const handleFinish = async (values: { subjects: ISubjectListType[] }) => {
-    if (onFinish) {
-      await onFinish(values); // <-- use parent-provided onFinish
+    const subject = values.subjects[0];
+
+    if (editMode && record) {
+      // Only send changed fields
+      const payload: Partial<ISubjectListType> & { id: number } = {
+        id: record.id,
+      };
+      const code = String(subject.code);
+      if (subject.name !== record.name) payload.name = subject.name;
+      if (subject.code !== record.code) payload.code = code;
+      if (subject.status !== record.status) payload.status = subject.status;
+
+      if (Object.keys(payload).length > 1) {
+        await updateSubject(payload).unwrap();
+      }
     } else {
-      await createSubjectList(values.subjects).unwrap(); // default create
+      await createSubject(values.subjects).unwrap();
     }
+
+    form.resetFields();
   };
 
   return (
@@ -39,9 +60,6 @@ const CreateSubject = ({ form, record, editMode, onFinish }: IProps) => {
       form={form}
       onFinish={handleFinish}
       autoComplete="off"
-      initialValues={{
-        subjects: editMode && record ? [{ ...record }] : [{}],
-      }}
     >
       <Form.List name="subjects">
         {(fields, { add, remove }) => (
@@ -68,9 +86,9 @@ const CreateSubject = ({ form, record, editMode, onFinish }: IProps) => {
                     normalize={(value) => String(value)}
                   >
                     <InputNumber
-                      type="number"
                       placeholder="Enter subject code"
                       style={{ width: "100%" }}
+                      type="number"
                     />
                   </Form.Item>
                 </Col>
@@ -122,7 +140,10 @@ const CreateSubject = ({ form, record, editMode, onFinish }: IProps) => {
         )}
       </Form.List>
 
-      <FormSubmit name={editMode ? "Update" : "Submit"} loading={isLoading} />
+      <FormSubmit
+        name={editMode ? "Update" : "Submit"}
+        loading={creating || updating}
+      />
     </Form>
   );
 };

@@ -62,12 +62,7 @@ const SemesterList = () => {
     }
   };
 
-  // const handleEdit = (record: ISemester) => {
-  //   setEditingSemester(record);
-  //   form.setFieldsValue({
-  //     semesters: [{ semester_code: record.semester_code }],
-  //   });
-  // };
+
 
   const handleDelete = async (id: number) => {
     try {
@@ -89,20 +84,6 @@ const SemesterList = () => {
       dataIndex: "created_by_name",
       key: "created_by_name",
     },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   align: "center",
-    //   width: 120,
-    //   render: (_: any, record: ISemester) => (
-    //     <CommTableActions
-    //       showEdit
-    //       showDelete
-    //       handleEditChange={() => handleEdit(record)}
-    //       deleteOnConfirm={() => handleDelete(record.id!)}
-    //     />
-    //   ),
-    // },
     {
       title: "Action",
       key: "action",

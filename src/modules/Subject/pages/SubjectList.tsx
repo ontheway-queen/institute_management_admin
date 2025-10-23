@@ -6,8 +6,6 @@ import {
   useGetSubjectListQuery,
 } from "../api/subjectApiEndpoints";
 import CommStatusTag from "../../../common/Utilities/CommStatusTag";
-import { ISubjectListType } from "../types/subjectTypes";
-import { useForm } from "antd/es/form/Form";
 import useQueryParams from "../../../hooks/useQueryParams";
 import CreateSubject from "../components/CreateSubject";
 import { useDispatch } from "react-redux";
@@ -15,7 +13,6 @@ import { showModal } from "../../../app/slice/modalSlice";
 import EditSubject from "../components/EditSubject";
 
 const SubjectList = () => {
-  const [form] = useForm<{ subjects: ISubjectListType[] }>();
   const dispatch = useDispatch();
   const [query, setSearchParams] = useQueryParams<{
     limit: string;
@@ -32,7 +29,7 @@ const SubjectList = () => {
       openModal={{
         title: "Create Subject",
         width: 900,
-        content: <CreateSubject form={form} />,
+        content: <CreateSubject />,
       }}
       statusOption={{
         placeholder: "Select Status",
