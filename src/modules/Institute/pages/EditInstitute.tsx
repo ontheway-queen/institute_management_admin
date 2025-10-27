@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { CaretLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import {
+  Button,
+  Card,
+  Col,
   Form,
   Input,
-  Button,
-  Upload,
-  Select,
   message,
   Row,
-  Col,
-  Card,
-  Checkbox,
+  Select,
+  Upload,
 } from "antd";
-import { CaretLeftOutlined, UploadOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useQueryParams from "../../../hooks/useQueryParams";
-import { useGetSubjectListQuery } from "../../Subject/api/subjectApiEndpoints";
-import { useGetDepartmentListQuery } from "../../Department/api/departmentApiEndpoints";
 import {
   useGetSingleInstituteQuery,
   useUpdateInstituteMutation,
@@ -26,11 +22,11 @@ const EditInstitute: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [query] = useQueryParams<{
-    limit: string;
-    skip: string;
-    name: string;
-  }>();
+  // const [query] = useQueryParams<{
+  //   limit: string;
+  //   skip: string;
+  //   name: string;
+  // }>();
 
   // Fetch data
   const { data: instituteResponse, isLoading } = useGetSingleInstituteQuery({
@@ -38,8 +34,8 @@ const EditInstitute: React.FC = () => {
   });
   const institute: IInstituteALL | undefined = instituteResponse?.data;
 
-  const { data: departmentData } = useGetDepartmentListQuery({ ...query });
-  const { data: subjectData } = useGetSubjectListQuery({ ...query });
+  // const { data: departmentData } = useGetDepartmentListQuery({ ...query });
+  // const { data: subjectData } = useGetSubjectListQuery({ ...query });
 
   const [updateInstitute, { isLoading: updateLoading }] =
     useUpdateInstituteMutation();
@@ -89,13 +85,13 @@ const EditInstitute: React.FC = () => {
 
   const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-  const handleSubjectChange = (checkedValues: number[]) => {
-    setSelectedSubjects(checkedValues);
-  };
+  // const handleSubjectChange = (checkedValues: number[]) => {
+  //   setSelectedSubjects(checkedValues);
+  // };
 
-  const handleDepartmentChange = (checkedValues: number[]) => {
-    setSelectedDepartments(checkedValues);
-  };
+  // const handleDepartmentChange = (checkedValues: number[]) => {
+  //   setSelectedDepartments(checkedValues);
+  // };
 
   const onFinish = async (values: any) => {
     if (!institute) return;
@@ -324,7 +320,7 @@ const EditInstitute: React.FC = () => {
         </Row>
 
         {/* Subjects Checklist */}
-        <Card title="Subjects">
+        {/* <Card title="Subjects">
           <Checkbox.Group
             style={{ width: "100%" }}
             value={selectedSubjects}
@@ -338,10 +334,10 @@ const EditInstitute: React.FC = () => {
               ))}
             </Row>
           </Checkbox.Group>
-        </Card>
+        </Card> */}
 
         {/* Departments Checklist */}
-        <Card title="Departments" style={{ marginTop: 20 }}>
+        {/* <Card title="Departments" style={{ marginTop: 20 }}>
           <Checkbox.Group
             style={{ width: "100%" }}
             value={selectedDepartments}
@@ -355,7 +351,7 @@ const EditInstitute: React.FC = () => {
               ))}
             </Row>
           </Checkbox.Group>
-        </Card>
+        </Card> */}
 
         <Form.Item style={{ marginTop: 20 }}>
           <Button type="primary" htmlType="submit" loading={updateLoading}>

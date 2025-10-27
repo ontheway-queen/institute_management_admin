@@ -71,7 +71,7 @@ const InstituteList = () => {
       width: 110,
       render: (_: any, record: IInstituteALL) => (
         <CommTableActions
-          showDelete
+          // showDelete
           showView
           showEdit
           handleViewChange={() => {

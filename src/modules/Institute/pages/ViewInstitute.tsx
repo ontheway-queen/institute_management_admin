@@ -1,11 +1,10 @@
+import { CaretLeftOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Row } from "antd";
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { imgUrl2 } from "../../../app/utilities/baseQuery";
 import { useGetSingleInstituteQuery } from "../api/instituteApiEndpoints";
 import { IInstituteALL } from "../types/instituteTypes";
-import { Card, Row, Col, Table, Button } from "antd";
-import { ColumnsType } from "antd/es/table";
-import { imgUrl2 } from "../../../app/utilities/baseQuery";
-import { CaretLeftOutlined } from "@ant-design/icons";
 
 const ViewInstitute: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,28 +14,28 @@ const ViewInstitute: React.FC = () => {
   const institute: IInstituteALL | undefined = data?.data;
   console.log(institute);
   // Columns for subjects table
-  const subjectColumns: ColumnsType<any> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Code", dataIndex: "code", key: "code" },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status: boolean) => (status ? "Active" : "Inactive"),
-    },
-  ];
+  // const subjectColumns: ColumnsType<any> = [
+  //   { title: "Name", dataIndex: "name", key: "name" },
+  //   { title: "Code", dataIndex: "code", key: "code" },
+  //   {
+  //     title: "Status",
+  //     dataIndex: "status",
+  //     key: "status",
+  //     render: (status: boolean) => (status ? "Active" : "Inactive"),
+  //   },
+  // ];
 
   // Columns for departments table
-  const departmentColumns: ColumnsType<any> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Short Name", dataIndex: "short_name", key: "short_name" },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status: boolean) => (status ? "Active" : "Inactive"),
-    },
-  ];
+  // const departmentColumns: ColumnsType<any> = [
+  //   { title: "Name", dataIndex: "name", key: "name" },
+  //   { title: "Short Name", dataIndex: "short_name", key: "short_name" },
+  //   {
+  //     title: "Status",
+  //     dataIndex: "status",
+  //     key: "status",
+  //     render: (status: boolean) => (status ? "Active" : "Inactive"),
+  //   },
+  // ];
 
   if (isLoading || !institute) return <div>Loading...</div>;
 
@@ -153,23 +152,23 @@ const ViewInstitute: React.FC = () => {
         </Row>
       </Card>
 
-      <Card title="Subjects" style={{ marginBottom: 20 }}>
+      {/* <Card title="Subjects" style={{ marginBottom: 20 }}>
         <Table
           columns={subjectColumns}
           dataSource={institute.subjects}
           rowKey="id"
           pagination={false}
         />
-      </Card>
+      </Card> */}
 
-      <Card title="Departments" style={{ marginBottom: 20 }}>
+      {/* <Card title="Departments" style={{ marginBottom: 20 }}>
         <Table
           columns={departmentColumns}
           dataSource={institute.departments}
           rowKey="id"
           pagination={false}
         />
-      </Card>
+      </Card> */}
     </div>
   );
 };

@@ -17,13 +17,13 @@ export interface IInstitute {
     password: string;
     phone: string;
     gender: string;
-    blood_group: string;
+    blood_group?: string;
     nid: string;
   };
   institute_logo: File;
-  institute_head_photo: File;
-  subjects: number[]; // array of subject IDs
-  departments: number[]; // array of department IDs
+  institute_head_photo?: File | null;
+  // subjects: number[];
+  // departments: number[];
 }
 
 export interface IInstituteHead {

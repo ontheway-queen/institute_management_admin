@@ -35,8 +35,6 @@ const instituteApiEndpoints = api.injectEndpoints({
 
     createInstitute: builder.mutation<void, FormData>({
       query: (payload): FetchArgs => {
-        // Log all keys and values in FormData
-        console.log("FormData contents:");
         payload.forEach((value, key) => {
           console.log(key, value);
         });

@@ -46,8 +46,8 @@ const CreateInstitute: React.FC = () => {
     useCreateInstituteMutation();
 
   const onFinish = async (values: any) => {
-    if (!logoFile || !headPhotoFile) {
-      message.error("Please upload both institute logo and head photo.");
+    if (!logoFile) {
+      message.error("Please upload institute logo");
       return;
     }
 
@@ -75,24 +75,27 @@ const CreateInstitute: React.FC = () => {
       },
       institute_logo: logoFile,
       institute_head_photo: headPhotoFile,
-      subjects: values.subjects, // array of IDs from Select
-      departments: values.departments, // array of IDs from Select
+      // subjects: values.subjects,
+      // departments: values.departments,
     };
-
+    console.log({ payload });
     const formData = new FormData();
     formData.append("institute_logo", payload.institute_logo);
-    formData.append("institute_head_photo", payload.institute_head_photo);
+    if (payload.institute_head_photo) {
+      formData.append(
+        "institute_head_photo",
+        payload.institute_head_photo as File
+      );
+    }
     formData.append("institute", JSON.stringify(payload.institute));
     formData.append("institute_head", JSON.stringify(payload.instituteHead));
 
     // Append each subject ID to FormData
 
-    formData.append("subjects", JSON.stringify(payload.subjects));
-
-    formData.append("departments", JSON.stringify(payload.departments));
+    // formData.append("subjects", JSON.stringify(payload.subjects));
+    // formData.append("departments", JSON.stringify(payload.departments));
 
     try {
-      console.log("FormData contents:");
       formData.forEach((value, key) => console.log(key, value));
 
       await createInstitute(formData).unwrap(); // RTK Query mutation
@@ -162,16 +165,28 @@ const CreateInstitute: React.FC = () => {
               <Input placeholder="Enter website URL" />
             </Form.Item>
 
-            <Form.Item name="category" label="Category">
+            <Form.Item
+              name="category"
+              label="Category"
+              rules={[{ required: true }]}
+            >
               <Select
+                defaultValue="polytechnic"
+                placeholder="Select a category"
                 options={[
                   { label: "Polytechnic", value: "polytechnic" },
                   { label: "School", value: "school" },
                 ]}
               />
             </Form.Item>
-            <Form.Item name="ownership" label="Ownership">
+            <Form.Item
+              name="ownership"
+              label="Ownership"
+              rules={[{ required: true }]}
+            >
               <Select
+                defaultValue="Public"
+                placeholder="Select ownership"
                 options={[
                   { label: "Public", value: "public" },
                   { label: "Private", value: "private" },
@@ -235,6 +250,7 @@ const CreateInstitute: React.FC = () => {
             </Form.Item>
             <Form.Item name="head_gender" label="Gender">
               <Select
+                placeholder="Select your gender"
                 options={[
                   { label: "পুরুষ", value: "পুরুষ" },
                   { label: "মহিলা", value: "মহিলা" },
