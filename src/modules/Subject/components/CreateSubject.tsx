@@ -1,5 +1,3 @@
-
-
 import { Form, Row, Col, Button, Input, Radio, InputNumber } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import FormSubmit from "../../../common/Antd/Form/FormSubmit";
@@ -73,7 +71,7 @@ const CreateSubject = ({ editMode = false, record }: IProps) => {
                     label={`Name ${fields.length > 1 ? index + 1 : ""}`}
                     rules={[{ required: true, message: "Name is required" }]}
                   >
-                    <Input placeholder="Enter subject name" />
+                    <Input placeholder="Enter Subject Name" />
                   </Form.Item>
                 </Col>
 
