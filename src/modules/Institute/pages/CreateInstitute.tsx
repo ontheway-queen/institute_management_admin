@@ -1,47 +1,44 @@
-import React, { useState } from "react";
+import { CaretLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import {
+  Button,
+  Card,
+  Col,
   Form,
   Input,
-  Button,
-  Upload,
-  Select,
   message,
   Row,
-  Col,
-  Card,
+  Select,
+  Upload,
 } from "antd";
-import { CaretLeftOutlined, UploadOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useQueryParams from "../../../hooks/useQueryParams";
-import { useGetSubjectListQuery } from "../../Subject/api/subjectApiEndpoints";
-import { useGetDepartmentListQuery } from "../../Department/api/departmentApiEndpoints";
 import { useCreateInstituteMutation } from "../api/instituteApiEndpoints";
 import { IInstitute } from "../types/instituteTypes";
 
 const CreateInstitute: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [query] = useQueryParams<{
-    limit: string;
-    skip: string;
-    name: string;
-  }>();
+  // const [query] = useQueryParams<{
+  //   limit: string;
+  //   skip: string;
+  //   name: string;
+  // }>();
   const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-  const { data: departmentData } = useGetDepartmentListQuery({
-    ...query,
-  });
-  const { data: subjectData } = useGetSubjectListQuery({
-    ...query,
-  });
+  // const { data: departmentData } = useGetDepartmentListQuery({
+  //   ...query,
+  // });
+  // const { data: subjectData } = useGetSubjectListQuery({
+  //   ...query,
+  // });
 
-  const departmentOptions = departmentData?.data?.map((dept) => ({
-    label: dept.name, // what user sees
-    value: dept.id, // what gets submitted
-  }));
-  const subjectOptions = subjectData?.data?.map((sub) => ({
-    label: sub.name, // what user sees
-    value: sub.id, // what gets submitted
-  }));
+  // const departmentOptions = departmentData?.data?.map((dept) => ({
+  //   label: dept.name, // what user sees
+  //   value: dept.id, // what gets submitted
+  // }));
+  // const subjectOptions = subjectData?.data?.map((sub) => ({
+  //   label: sub.name, // what user sees
+  //   value: sub.id, // what gets submitted
+  // }));
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [headPhotoFile, setHeadPhotoFile] = useState<File | null>(null);
 
