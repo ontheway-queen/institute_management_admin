@@ -245,13 +245,7 @@ const CreateInstitute: React.FC = () => {
               />
             </Form.Item>
 
-            <Form.Item
-              name="head_blood_group"
-              label="Blood Group"
-              rules={[
-                { required: true, message: "Please select a blood group" },
-              ]}
-            >
+            <Form.Item name="head_blood_group" label="Blood Group">
               <Select placeholder="Select blood group">
                 {BLOOD_GROUPS.map((bg) => (
                   <Select.Option key={bg} value={bg}>
@@ -263,7 +257,7 @@ const CreateInstitute: React.FC = () => {
             <Form.Item name="head_nid" label="NID">
               <Input placeholder="Enter NID" />
             </Form.Item>
-            <Form.Item label="Head Photo" required>
+            <Form.Item label="Head Photo">
               <Upload
                 beforeUpload={(file) => {
                   setHeadPhotoFile(file);
@@ -279,7 +273,7 @@ const CreateInstitute: React.FC = () => {
       </Row>
 
       <Row gutter={16}>
-        <Col xs={24} lg={12}>
+        {/* <Col xs={24} lg={12}>
           <Form.Item
             name="subjects"
             label="Subjects"
@@ -291,11 +285,11 @@ const CreateInstitute: React.FC = () => {
               placeholder="Select subjects"
             />
           </Form.Item>
-        </Col>
-        <Col xs={24} lg={12}>
+        </Col> */}
+        {/* <Col xs={24} lg={12}>
           <Form.Item
             name="departments"
-            label="Departments"
+            label="Technology"
             rules={[{ required: true }]}
           >
             <Select
@@ -304,7 +298,7 @@ const CreateInstitute: React.FC = () => {
               placeholder="Select departments"
             />
           </Form.Item>
-        </Col>
+        </Col> */}
       </Row>
 
       <Form.Item>
