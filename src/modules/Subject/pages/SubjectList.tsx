@@ -16,7 +16,7 @@ const SubjectList = () => {
   const dispatch = useDispatch();
   const [query, setSearchParams] = useQueryParams<{
     limit: string;
-    skip: string;
+    skip: number;
     name: string;
   }>();
   const { data, isLoading } = useGetSubjectListQuery({ ...query });

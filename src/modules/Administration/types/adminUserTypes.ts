@@ -1,4 +1,4 @@
-import { PermissionItem } from '../components/RolePermissionForm';
+import { PermissionItem } from "../components/RolePermissionForm";
 
 export interface UserAdminListType {
   user_id: number;
@@ -17,7 +17,7 @@ export interface UserSingleAdminType extends UserAdminListType {
 
 export interface IQueryParams {
   limit?: string;
-  skip?: string;
+  skip?: number | string;
   name?: string;
   status?: string | Boolean;
   filter?: string;

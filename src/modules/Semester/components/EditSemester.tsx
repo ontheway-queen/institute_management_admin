@@ -13,7 +13,7 @@ interface IProps {
 const EditSemester = ({ id }: IProps) => {
   const [form] = Form.useForm();
   const { data: semester } = useGetSemesterListQuery(
-    { limit: "1", skip: "0" },
+    { limit: "1", skip: 0 },
     {
       selectFromResult: ({ data }) => ({
         data: data?.data?.find((s) => s.id === id),
