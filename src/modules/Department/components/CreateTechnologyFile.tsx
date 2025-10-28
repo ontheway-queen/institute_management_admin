@@ -4,15 +4,15 @@ import { RcFile } from "antd/lib/upload";
 import Papa from "papaparse";
 import React, { useEffect, useState } from "react";
 import FileUploadLabel from "../../../utilities/FileUploadLabel";
-import { useCreateSubjectMutation } from "../api/subjectApiEndpoints";
-import { ICreateSubjecCSVtType } from "../types/subjectTypes";
+import { ICreateDepartmentCSVType } from "../types/departmentTypes";
+import { useCreateDepartmentMutation } from "../api/departmentApiEndpoints";
 
-const CreateSubjectFile: React.FC = () => {
+const CreateTechnologyFile: React.FC = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<RcFile[]>([]);
-  const [jsonData, setJsonData] = useState<ICreateSubjecCSVtType[]>([]);
+  const [jsonData, setJsonData] = useState<ICreateDepartmentCSVType[]>([]);
 
-  const [createBulkSubject, { isLoading }] = useCreateSubjectMutation();
+  const [createBulkTechnology, { isLoading }] = useCreateDepartmentMutation();
   useEffect(() => {
     form.resetFields();
     setFileList([]);
@@ -43,18 +43,20 @@ const CreateSubjectFile: React.FC = () => {
       let csvString = e.target?.result as string;
       csvString = preprocessCSV(csvString);
 
-      const results = Papa.parse<ICreateSubjecCSVtType>(csvString, {
+      const results = Papa.parse<ICreateDepartmentCSVType>(csvString, {
         header: true,
         skipEmptyLines: true,
         quoteChar: '"',
-        dynamicTyping: true,
+        dynamicTyping: false,
         delimiter: ",",
-        transformHeader: (header) => header.trim().toLowerCase(),
+        transformHeader: (header) =>
+          header.trim().toLowerCase().replace(/\s+/g, "_"),
       });
       console.log({ results });
-      const data: ICreateSubjecCSVtType[] = results.data.map((row) => ({
+      const data: ICreateDepartmentCSVType[] = results.data.map((row) => ({
         name: (row.name || "").toString().trim(),
         code: (row.code || "").toString(),
+        short_name: (row["short_name"] || "").toString().trim(),
       }));
 
       setJsonData(data);
@@ -74,10 +76,15 @@ const CreateSubjectFile: React.FC = () => {
   const renderJsonData = () => {
     if (jsonData.length === 0) return null;
 
-    const headers: Array<keyof ICreateSubjecCSVtType> = ["name", "code"];
+    const headers: Array<keyof ICreateDepartmentCSVType> = [
+      "name",
+      "code",
+      "short_name",
+    ];
     const headerLabels = {
-      name: "Subject Name",
-      code: "Subject Code",
+      name: "Technology Name",
+      code: "Technology Code",
+      short_name: "Short Name",
     };
 
     return (
@@ -130,7 +137,7 @@ const CreateSubjectFile: React.FC = () => {
     }
 
     try {
-      await createBulkSubject(jsonData).unwrap();
+      await createBulkTechnology(jsonData).unwrap();
       form.resetFields();
       setFileList([]);
       setJsonData([]);
@@ -144,13 +151,16 @@ const CreateSubjectFile: React.FC = () => {
 
   const handleDownloadSample = () => {
     const csvContent =
-      "\uFEFF" + "Name,Code\n" + "Physics,69\n" + "Mathematics,71";
+      "\uFEFF" +
+      "Name,Code, Short Name\n" +
+      "Power Technology,69, PT\n" +
+      "Computer Science and Engineering,71,CSE";
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "create_subject_template.csv";
+    a.download = "create_technology_template.csv";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -225,4 +235,4 @@ const CreateSubjectFile: React.FC = () => {
   );
 };
 
-export default CreateSubjectFile;
+export default CreateTechnologyFile;

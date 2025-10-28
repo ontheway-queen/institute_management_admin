@@ -9,8 +9,8 @@ import {
   useDeleteDepartmentMutation,
   useGetDepartmentListQuery,
 } from "../api/departmentApiEndpoints";
-import CreateTechnology from "../components/CreateTechnology";
 import EditDepartment from "../components/EditDepartment";
+import SelectCreateTechnology from "../components/SelectTechnology";
 import { IDepartmentListType } from "../types/departmentTypes";
 
 const DepartmentList = () => {
@@ -42,7 +42,7 @@ const DepartmentList = () => {
       openModal={{
         title: "Create Technology",
         width: 900,
-        content: <CreateTechnology />,
+        content: <SelectCreateTechnology />,
       }}
       statusOption={{
         placeholder: "Select Status",

@@ -15,6 +15,11 @@ export interface ICreateDepartmentType {
   status: boolean;
   semesters?: number[];
 }
+export interface ICreateDepartmentCSVType {
+  name: string;
+  code: string;
+  short_name?: string;
+}
 export interface IDepartmentFormValues {
   departments: ICreateDepartmentType[];
 }

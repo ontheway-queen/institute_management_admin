@@ -5,6 +5,7 @@ import {
   IDepartmentListType,
   ICreateDepartmentType,
   IUpdateDepartmentType,
+  ICreateDepartmentCSVType,
 } from "../types/departmentTypes";
 import { IQueryParams } from "../../Administration/types/adminUserTypes";
 
@@ -20,7 +21,10 @@ const departmentApiEndpoints = api.injectEndpoints({
       }),
       providesTags: ["DEPARTMENT"],
     }),
-    createDepartment: builder.mutation<void, ICreateDepartmentType[]>({
+    createDepartment: builder.mutation<
+      void,
+      ICreateDepartmentType[] | ICreateDepartmentCSVType[]
+    >({
       query: (payload): FetchArgs => ({
         url: "/management/department",
         method: "POST",

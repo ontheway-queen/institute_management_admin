@@ -21,36 +21,36 @@ const CreateTechnology = () => {
           <>
             {fields.map(({ key, name, ...restField }) => (
               <Row gutter={[10, 0]} key={key} align="middle">
-                <Col xs={24} md={6}>
+                <Col xs={24} md={8}>
                   <Form.Item
                     name={[name, "name"]}
                     label="Name"
                     rules={[{ required: true }]}
                     {...restField}
                   >
-                    <Input />
+                    <Input placeholder="Enter a technology name" />
                   </Form.Item>
                 </Col>
 
-                <Col xs={24} md={6}>
+                <Col xs={24} md={8}>
                   <Form.Item
                     name={[name, "code"]}
                     label="Code"
                     rules={[{ required: true, message: "Code is required" }]}
                     {...restField}
                   >
-                    <Input type="number" />
+                    <Input type="number" placeholder="Type a technology code" />
                   </Form.Item>
                 </Col>
 
-                <Col xs={24} md={6}>
+                <Col xs={24} md={8}>
                   <Form.Item
                     name={[name, "short_name"]}
                     rules={[{ required: true }]}
                     label="Short Name"
                     {...restField}
                   >
-                    <Input />
+                    <Input placeholder="Type a short name" />
                   </Form.Item>
                 </Col>
 
