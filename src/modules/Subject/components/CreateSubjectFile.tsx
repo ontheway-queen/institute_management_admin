@@ -144,7 +144,7 @@ const CreateSubjectFile: React.FC = () => {
 
   const handleDownloadSample = () => {
     const csvContent =
-      "\uFEFF" + "Name,Code\n" + "Physics,69\n" + "Mathematics,71";
+      "\uFEFF" + "Name,Code\n" + "Physics,27049\n" + "Mathematics,37044";
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = window.URL.createObjectURL(blob);
