@@ -23,7 +23,7 @@ export const appRoutes: AppRouteObject[] = [
   },
 
   {
-    path: "/department",
+    path: "/technology",
     children: [
       {
         path: "list",

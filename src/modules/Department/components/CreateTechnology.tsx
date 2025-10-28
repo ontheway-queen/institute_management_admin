@@ -19,13 +19,13 @@ const CreateTechnology = () => {
       <Form.List name="departments" initialValue={[{}]}>
         {(fields, { add, remove }) => (
           <>
-            {fields.map(({ key, name, ...restField }, index) => (
+            {fields.map(({ key, name, ...restField }) => (
               <Row gutter={[10, 0]} key={key} align="middle">
                 <Col xs={24} md={6}>
                   <Form.Item
                     name={[name, "name"]}
-                    label={`Name ${fields.length > 1 ? index + 1 : ""}`}
-                    rules={[{ required: true, message: "Name is required" }]}
+                    label="Name"
+                    rules={[{ required: true }]}
                     {...restField}
                   >
                     <Input />
@@ -46,6 +46,7 @@ const CreateTechnology = () => {
                 <Col xs={24} md={6}>
                   <Form.Item
                     name={[name, "short_name"]}
+                    rules={[{ required: true }]}
                     label="Short Name"
                     {...restField}
                   >
@@ -74,7 +75,7 @@ const CreateTechnology = () => {
                   icon={<PlusOutlined />}
                   block
                 >
-                  Add Another Department
+                  Add Another Technology
                 </Button>
               </Col>
             </Row>

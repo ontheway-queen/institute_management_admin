@@ -26,8 +26,8 @@ export const navigationMenu: NavigationItem[] = [
     icon: icons.list,
   },
   {
-    key: "/department/list",
-    to: "/department/list",
+    key: "/technology/list",
+    to: "/technology/list",
     label: "Technology List",
     icon: icons.list,
   },

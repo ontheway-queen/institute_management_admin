@@ -25,7 +25,7 @@ const Dashboard = () => {
   const { xl } = useBreakpoint();
   // Hardcoded data for dashboard statistics
   const stats = [
-    { title: "Departments", value: 8, icon: "mdi:office-building" },
+    { title: "Technologies", value: 8, icon: "mdi:office-building" },
     { title: "Semesters", value: 12, icon: "mdi:calendar-range" },
     { title: "Batches", value: 24, icon: "mdi:layers" },
     { title: "Teachers", value: 56, icon: "mdi:account-tie" },
@@ -199,7 +199,7 @@ const Dashboard = () => {
             <Col xs={24} md={12}>
               <Card
                 size="small"
-                customTitle="Students per Department"
+                customTitle="Students per Technology"
                 titleUnderline
                 heightFull
               >
