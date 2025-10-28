@@ -226,7 +226,7 @@ const CreateTechnologyFile: React.FC = () => {
               loading={isLoading}
               style={{ width: "100%" }}
             >
-              Create Subject
+              Create Technology
             </Button>
           </Form.Item>
         </Form>
