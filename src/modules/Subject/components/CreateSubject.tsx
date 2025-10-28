@@ -64,7 +64,7 @@ const CreateSubject = ({ editMode = false, record }: IProps) => {
           <>
             {fields.map(({ key, name, ...restField }, index) => (
               <Row gutter={[10, 0]} key={key} align="middle">
-                <Col xs={24} md={8}>
+                <Col xs={24} md={12}>
                   <Form.Item
                     {...restField}
                     name={[name, "name"]}
@@ -75,7 +75,7 @@ const CreateSubject = ({ editMode = false, record }: IProps) => {
                   </Form.Item>
                 </Col>
 
-                <Col xs={24} md={8}>
+                <Col xs={24} md={12}>
                   <Form.Item
                     {...restField}
                     name={[name, "code"]}

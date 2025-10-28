@@ -1,6 +1,6 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import React from 'react';
-import { RootState } from '../store';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import React from "react";
+import { RootState } from "../store";
 
 export type ModalTypes =
   | {
@@ -20,7 +20,7 @@ const initialState: ModalStateType = {
 };
 
 const modalSlice = createSlice({
-  name: 'modal',
+  name: "modal",
   initialState,
   reducers: {
     showModal: (state, { payload }: PayloadAction<ModalTypes>) => {

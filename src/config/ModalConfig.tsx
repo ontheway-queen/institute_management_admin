@@ -1,7 +1,7 @@
-import React from 'react';
-import { Modal, Typography } from 'antd';
-import { useAppDispatch, useAppSelector } from '../app/store';
-import { closeModal, ModalState } from '../app/slice/modalSlice';
+import React from "react";
+import { Modal, Typography } from "antd";
+import { useAppDispatch, useAppSelector } from "../app/store";
+import { closeModal, ModalState } from "../app/slice/modalSlice";
 
 const ModalConfig: React.FC = () => {
   const { open, title, content, width } = useAppSelector(ModalState);
@@ -19,8 +19,8 @@ const ModalConfig: React.FC = () => {
       width={width}
       footer={null}
       title={
-        <Typography.Paragraph strong style={{ fontSize: '1rem' }}>
-          {title || 'Information'}
+        <Typography.Paragraph strong style={{ fontSize: "1rem" }}>
+          {title || "Information"}
         </Typography.Paragraph>
       }
       children={content || <>No content available</>}

@@ -61,28 +61,28 @@ const Dashboard = () => {
     {
       id: "C001",
       name: "Introduction to Programming",
-      department: "CSE",
+      technology: "CSE",
       students: 125,
       sessions: 20,
     },
     {
       id: "C002",
       name: "Circuit Analysis I",
-      department: "EEE",
+      technology: "EEE",
       students: 98,
       sessions: 18,
     },
     {
       id: "C003",
       name: "Principles of Marketing",
-      department: "BBA",
+      technology: "BBA",
       students: 110,
       sessions: 22,
     },
     {
       id: "C004",
       name: "Academic Writing",
-      department: "English",
+      technology: "English",
       students: 85,
       sessions: 15,
     },
@@ -92,7 +92,7 @@ const Dashboard = () => {
   const courseColumns = [
     { title: "Course ID", dataIndex: "id", key: "id" },
     { title: "Course Name", dataIndex: "name", key: "name" },
-    { title: "Department", dataIndex: "department", key: "department" },
+    { title: "Technology", dataIndex: "technology", key: "technology" },
     {
       title: "Students",
       dataIndex: "students",

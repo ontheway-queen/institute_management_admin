@@ -16,6 +16,10 @@ export interface ICreateSubjectType {
   code: number;
   status?: boolean;
 }
+export interface ICreateSubjecCSVtType {
+  name: string;
+  code: string;
+}
 
 // For Updating a Single Subject
 export interface IUpdateSubjectType {

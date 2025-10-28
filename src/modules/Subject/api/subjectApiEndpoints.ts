@@ -1,7 +1,11 @@
 import { FetchArgs } from "@reduxjs/toolkit/query";
 import api from "../../../app/api/api";
 import { ApiResponse } from "../../../app/utilities/response";
-import { ISubjectListType, IUpdateSubjectType } from "../types/subjectTypes";
+import {
+  ICreateSubjecCSVtType,
+  ISubjectListType,
+  IUpdateSubjectType,
+} from "../types/subjectTypes";
 import { IQueryParams } from "../../Administration/types/adminUserTypes";
 
 const subjectApiEndpoints = api.injectEndpoints({
@@ -16,7 +20,10 @@ const subjectApiEndpoints = api.injectEndpoints({
       }),
       providesTags: ["SUBJECT"],
     }),
-    createSubject: builder.mutation<void, ISubjectListType[]>({
+    createSubject: builder.mutation<
+      void,
+      ISubjectListType[] | ICreateSubjecCSVtType[]
+    >({
       query: (payload): FetchArgs => ({
         url: "/management/subject",
         method: "POST",

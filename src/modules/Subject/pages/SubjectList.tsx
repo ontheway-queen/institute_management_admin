@@ -1,16 +1,16 @@
 import { Table } from "antd";
+import { useDispatch } from "react-redux";
+import { showModal } from "../../../app/slice/modalSlice";
 import Container from "../../../common/Container/Container";
+import CommStatusTag from "../../../common/Utilities/CommStatusTag";
 import CommTableActions from "../../../common/Utilities/CommTableActions";
+import useQueryParams from "../../../hooks/useQueryParams";
 import {
   useDeleteSubjectMutation,
   useGetSubjectListQuery,
 } from "../api/subjectApiEndpoints";
-import CommStatusTag from "../../../common/Utilities/CommStatusTag";
-import useQueryParams from "../../../hooks/useQueryParams";
-import CreateSubject from "../components/CreateSubject";
-import { useDispatch } from "react-redux";
-import { showModal } from "../../../app/slice/modalSlice";
 import EditSubject from "../components/EditSubject";
+import SelectCreateSubject from "../components/SelectSubjectList";
 
 const SubjectList = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const SubjectList = () => {
       openModal={{
         title: "Create Subject",
         width: 900,
-        content: <CreateSubject />,
+        content: <SelectCreateSubject />,
       }}
       statusOption={{
         placeholder: "Select Status",
