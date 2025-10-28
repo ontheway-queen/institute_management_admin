@@ -23,6 +23,7 @@ const CreateTechnologyFile: React.FC = () => {
   const preprocessCSV = (csvString: string) => {
     if (csvString.charCodeAt(0) === 0xfeff) csvString = csvString.slice(1);
     csvString = csvString.replace(/"([^"]*)\n([^"]*)"/g, '"$1 $2"');
+      csvString = csvString.replace(/“|”/g, '"');
     return csvString;
   };
 

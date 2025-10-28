@@ -22,7 +22,8 @@ const CreateSubjectFile: React.FC = () => {
   // Clean up CSV before parsing
   const preprocessCSV = (csvString: string) => {
     if (csvString.charCodeAt(0) === 0xfeff) csvString = csvString.slice(1);
-    csvString = csvString.replace(/"([^"]*)\n([^"]*)"/g, '"$1 $2"');
+
+    csvString = csvString.replace(/“|”/g, '"');
     return csvString;
   };
 
@@ -47,7 +48,7 @@ const CreateSubjectFile: React.FC = () => {
         header: true,
         skipEmptyLines: true,
         quoteChar: '"',
-        dynamicTyping: true,
+        dynamicTyping: false,
         delimiter: ",",
         transformHeader: (header) => header.trim().toLowerCase(),
       });
