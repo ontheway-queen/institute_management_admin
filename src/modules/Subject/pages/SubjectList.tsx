@@ -28,7 +28,7 @@ const SubjectList = () => {
       title="Subject List"
       openModal={{
         title: "Create Subject",
-        width: 900,
+        width: 600,
         content: <SelectCreateSubject />,
       }}
       statusOption={{

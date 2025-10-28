@@ -13,7 +13,13 @@ const FileUploadLabel = ({ onDownloadSample }: any) => {
         gap: "8px",
       }}
     >
-      <Text style={{ textAlign: "center" }}>Upload CSV File</Text>
+      <Text
+        style={{
+          paddingLeft: "100px",
+        }}
+      >
+        Upload CSV File
+      </Text>
       <Text style={{ color: "red" }}>*</Text>
       <Tooltip title="Download a sample CSV template">
         <Link

@@ -41,7 +41,7 @@ const DepartmentList = () => {
       title="Technology List"
       openModal={{
         title: "Create Technology",
-        width: 900,
+        width: 600,
         content: <SelectCreateTechnology />,
       }}
       statusOption={{

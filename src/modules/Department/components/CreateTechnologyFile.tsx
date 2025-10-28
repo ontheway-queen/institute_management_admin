@@ -152,7 +152,7 @@ const CreateTechnologyFile: React.FC = () => {
   const handleDownloadSample = () => {
     const csvContent =
       "\uFEFF" +
-      "Name,Code, Short Name\n" +
+      "Name,Code,Short Name\n" +
       "Power Technology,69, PT\n" +
       "Computer Science and Engineering,71,CSE";
 
